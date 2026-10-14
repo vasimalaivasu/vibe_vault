@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Songbook & Music Catalogue | VibeVault Private Karaoke</title>
+  <meta name="description" content="Explore over 120,000 studio-mastered karaoke tracks at VibeVault. Filter by genre, language, and vocal difficulty. Queue songs directly to your private suite.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#0B0914', surface: '#120E24', card: '#181236', purple: '#8B5CF6' },
+            neon: { pink: '#FF007F', cyan: '#00F0FF', purple: '#A855F7', orange: '#FF5E3A' }
+          },
+          fontFamily: { display: ['Outfit', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fast Theme & Direction Initializer -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('vox_theme');
+        const theme = t ? JSON.parse(t) : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+        const d = localStorage.getItem('vox_direction');
+        if (d) {
+          const dir = JSON.parse(d);
+          document.documentElement.setAttribute('dir', dir);
+          if (dir === 'rtl') document.documentElement.classList.add('rtl');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Custom Theme Styles -->
+  <link rel="stylesheet" href="assets/css/main.css?v=3.9">
+</head>
+<body class="antialiased selection:bg-pink-600 selection:text-white bg-[#0b0914] text-slate-100 min-h-screen">
+
+  <!-- Navbar Mount Point -->
+  <div id="navbar-mount"></div>
+
+  <!-- Main Content Wrapper with Top Navbar Clearance -->
+  <main class="pt-24 sm:pt-28 pb-20">
+
+    <!-- Hero Section: Master Songbook Header -->
+    <section class="relative overflow-hidden pt-8 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <!-- Ambient Glows -->
+      <div class="ambient-glow-pink -top-20 -left-20 opacity-30 pointer-events-none"></div>
+      <div class="ambient-glow-cyan top-40 -right-20 opacity-25 pointer-events-none"></div>
+
+      <div class="text-center max-w-3xl mx-auto space-y-4 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-800/50 text-xs font-bold text-pink-400 shadow-[0_0_15px_rgba(255,0,127,0.25)]">
+          <i class="bi bi-disc animate-spin" style="animation-duration: 4s;"></i>
+          <span>120,000+ STUDIO-GRADE KARAOKE TRACKS</span>
+        </div>
+        
+        <h1 class="font-display font-black text-4xl sm:text-6xl text-white tracking-tight leading-tight">
+          The VibeVault <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-cyan-400">Songbook</span>
+        </h1>
+        
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Search songs, explore multi-lingual hits, preview lyrics snippets, and build your private suite playlist before you even step through our doors.
+        </p>
+      </div>
+
+      <!-- Live Search & Control Console -->
+      <div class="mt-10 max-w-4xl mx-auto relative z-10">
+        <div class="glass-panel p-3 sm:p-4 rounded-3xl border border-purple-800/40 shadow-2xl backdrop-blur-xl bg-[#140e29]/90 space-y-3">
+          
+          <!-- Search Input Bar -->
+          <div class="relative flex items-center">
+            <i class="bi bi-search absolute left-4 text-pink-400 text-lg"></i>
+            <input type="text" id="songSearchInput" 
+                   placeholder="Search by song title, artist, lyrics, or decade (e.g. Queen, K-Pop, Journey)..." 
+                   class="w-full pl-12 pr-28 py-3.5 rounded-2xl bg-[#0e0920] border border-purple-800/60 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition">
+            
+            <button id="clearSearchBtn" class="hidden absolute right-3 px-3 py-1.5 rounded-xl bg-purple-900/40 text-xs text-slate-300 hover:text-white transition">
+              Clear
+            </button>
+          </div>
+
+          <!-- Filter Pills Row -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
+            
+            <!-- Genre Chips -->
+            <div class="flex flex-wrap items-center gap-1.5" id="genreFiltersContainer">
+              <button class="song-filter-pill active px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="all">
+                All Tracks
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="Pop">
+                Pop
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="Classic Rock">
+                Rock
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="K-Pop">
+                K-Pop
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="Bollywood">
+                Bollywood / Desi
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="Anime & J-Rock">
+                Anime & J-Rock
+              </button>
+              <button class="song-filter-pill px-3 py-1.5 rounded-full font-bold transition text-xs" data-genre="80s Synthwave">
+                80s & Retro
+              </button>
+            </div>
+
+            <!-- Language & Difficulty Dropdowns -->
+            <div class="flex items-center gap-2">
+              <select id="langSelect" class="bg-purple-950/60 border border-purple-800/50 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-cyan-400 transition">
+                <option value="all">All Languages</option>
+                <option value="English">English</option>
+                <option value="Korean">Korean</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Spanish">Spanish</option>
+              </select>
+
+              <select id="diffSelect" class="bg-purple-950/60 border border-purple-800/50 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-pink-400 transition">
+                <option value="all">All Difficulties</option>
+                <option value="Easy">Easy (Crowd Pleaser)</option>
+                <option value="Medium">Medium (Party Hit)</option>
+                <option value="Hard">Hard (Vocal Acrobatics)</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Track Results Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Results Status Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-purple-900/30 mb-6">
+        <div class="flex items-center gap-3">
+          <h2 class="font-display font-bold text-xl text-white">Track Catalogue</h2>
+          <span id="resultsCounterBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">
+            Loading...
+          </span>
+        </div>
+
+        <!-- Sort by dropdown -->
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span>Sort By:</span>
+          <select id="sortBySelect" class="bg-purple-950/60 border border-purple-800/50 text-slate-200 text-xs rounded-xl px-2.5 py-1 focus:outline-none focus:border-pink-500 transition">
+            <option value="popular">Most Popular</option>
+            <option value="title">Song Title (A–Z)</option>
+            <option value="artist">Artist (A–Z)</option>
+            <option value="bpm">Fastest Tempo (BPM)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Songs Cards Container -->
+      <div id="songsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered dynamically by script -->
+      </div>
+
+      <!-- Empty State Container -->
+      <div id="emptySongsState" class="hidden text-center py-16 px-4">
+        <div class="w-16 h-16 rounded-3xl bg-purple-950/60 border border-purple-800/60 mx-auto flex items-center justify-center text-3xl text-pink-400 mb-4">
+          <i class="bi bi-music-note"></i>
+        </div>
+        <h3 class="font-display font-bold text-xl text-white">No Tracks Found</h3>
+        <p class="text-sm text-slate-400 max-w-sm mx-auto mt-1">We couldn't find any songs matching your criteria. Try adjusting your search term or filters.</p>
+        <button id="resetFiltersBtn" class="btn-neon-primary px-5 py-2 rounded-xl text-xs font-bold mt-4">
+          Reset All Filters
+        </button>
+      </div>
+    </section>
+
+    <!-- Lounge Studio Audio Specs Ribbon -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div class="audio-specs-ribbon glass-panel p-6 sm:p-8 rounded-3xl border border-purple-800/40 relative overflow-hidden shadow-xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          
+          <div class="flex items-start gap-3.5">
+            <div class="audio-spec-icon audio-spec-icon-pink w-12 h-12 rounded-2xl bg-pink-500/20 text-pink-500 flex items-center justify-center text-xl shrink-0 shadow-sm border border-pink-500/30">
+              <i class="bi bi-mic-fill"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-bold text-white text-base audio-spec-title">Shure Wireless Beta 58A</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed audio-spec-desc">Dual pro-stage wireless microphones per suite with custom pop filters and instant mute switches.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5">
+            <div class="audio-spec-icon audio-spec-icon-cyan w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-500 flex items-center justify-center text-xl shrink-0 shadow-sm border border-cyan-500/30">
+              <i class="bi bi-sliders"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-bold text-white text-base audio-spec-title">Pitch & Tempo Correction</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed audio-spec-desc">Real-time digital key shifting up to ±6 semitones, guide vocals toggle, and studio reverb/delay presets.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5">
+            <div class="audio-spec-icon audio-spec-icon-purple w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-xl shrink-0 shadow-sm border border-purple-500/30">
+              <i class="bi bi-phone-fill"></i>
+            </div>
+            <div>
+              <h4 class="font-display font-bold text-white text-base audio-spec-title">Mobile Song Queuing</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed audio-spec-desc">Scan your in-suite QR code from any smartphone to instantly search and queue tracks without touching the main console.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sticky Suite Song Queue Floating Bar -->
+  <div id="stickyQueueBar" class="fixed bottom-5 right-5 z-40 transition-transform duration-300">
+    <button id="queueDrawerTrigger" class="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white text-xs font-bold shadow-[0_0_25px_rgba(255,0,127,0.45)] hover:shadow-[0_0_35px_rgba(255,0,127,0.65)] hover:scale-105 transition-all">
+      <i class="bi bi-music-note-list text-sm"></i>
+      <span>Suite Queue</span>
+      <span id="queueBadgeCounter" class="w-5 h-5 rounded-full bg-white text-pink-600 flex items-center justify-center text-[10px] font-black">
+        0
+      </span>
+    </button>
+  </div>
+
+  <!-- Queue Offcanvas Modal -->
+  <div id="queueModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#140e29] border border-purple-800/60 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-purple-800/40 pb-3">
+        <div class="flex items-center gap-2">
+          <i class="bi bi-music-note-beamed text-pink-400 text-xl"></i>
+          <h3 class="font-display font-bold text-white text-lg">My Suite Song Queue</h3>
+        </div>
+        <button id="closeQueueModalBtn" class="w-8 h-8 rounded-full bg-purple-900/40 text-slate-300 hover:text-white flex items-center justify-center">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div id="queuedSongsList" class="space-y-2 max-h-72 overflow-y-auto pr-1">
+        <!-- Queued items rendered here -->
+      </div>
+
+      <div class="border-t border-purple-800/40 pt-3 flex items-center justify-between gap-3">
+        <button id="clearQueueBtn" class="px-3.5 py-2 rounded-xl bg-purple-950/60 border border-purple-800/50 text-slate-300 hover:text-rose-400 text-xs font-semibold transition">
+          Clear All
+        </button>
+        <a href="dashboard.html#book" class="btn-neon-primary px-5 py-2 text-xs font-bold">
+          Book a Suite for These Songs <i class="bi bi-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lyrics Snippet Modal -->
+  <div id="lyricsModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#120e24] border border-purple-800/60 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-purple-800/40 pb-3">
+        <div>
+          <h4 id="lyricsModalTitle" class="font-display font-bold text-white text-base">Song Title</h4>
+          <p id="lyricsModalArtist" class="text-xs text-pink-400">Artist</p>
+        </div>
+        <button id="closeLyricsModalBtn" class="w-8 h-8 rounded-full bg-purple-900/40 text-slate-300 hover:text-white flex items-center justify-center">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-800/40 text-center space-y-2">
+        <span class="text-[10px] uppercase font-bold text-cyan-400 tracking-wider">Synchronized Karaoke Snippet</span>
+        <p id="lyricsModalSnippet" class="text-sm text-slate-200 italic leading-relaxed font-serif">
+          "Lyrics preview..."
+        </p>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
+        <span id="lyricsModalDetails">Key: E Major • 119 BPM</span>
+        <button id="lyricsQueueBtn" class="btn-neon-primary px-3 py-1.5 rounded-xl text-xs font-bold">
+          <i class="bi bi-plus-circle"></i> Add to Queue
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Mount Point -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data/songs-data.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- Interactive Songbook Controller -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const songs = window.VOX_SONGS || [];
+      const songsGrid = document.getElementById('songsGrid');
+      const emptyState = document.getElementById('emptySongsState');
+      const counterBadge = document.getElementById('resultsCounterBadge');
+      const searchInput = document.getElementById('songSearchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      const langSelect = document.getElementById('langSelect');
+      const diffSelect = document.getElementById('diffSelect');
+      const sortBySelect = document.getElementById('sortBySelect');
+      const genrePills = document.querySelectorAll('.song-filter-pill');
+      const resetBtn = document.getElementById('resetFiltersBtn');
+
+      // State
+      let currentGenre = 'all';
+      let currentLang = 'all';
+      let currentDiff = 'all';
+      let currentSearch = '';
+      let currentSort = 'popular';
+      let queuedSongIds = JSON.parse(localStorage.getItem('vox_queued_songs') || '[]');
+
+      // Queue UI Elements
+      const queueBadgeCounter = document.getElementById('queueBadgeCounter');
+      const queueDrawerTrigger = document.getElementById('queueDrawerTrigger');
+      const queueModal = document.getElementById('queueModal');
+      const closeQueueModalBtn = document.getElementById('closeQueueModalBtn');
+      const queuedSongsList = document.getElementById('queuedSongsList');
+      const clearQueueBtn = document.getElementById('clearQueueBtn');
+
+      // Lyrics Modal Elements
+      const lyricsModal = document.getElementById('lyricsModal');
+      const closeLyricsModalBtn = document.getElementById('closeLyricsModalBtn');
+      const lyricsModalTitle = document.getElementById('lyricsModalTitle');
+      const lyricsModalArtist = document.getElementById('lyricsModalArtist');
+      const lyricsModalSnippet = document.getElementById('lyricsModalSnippet');
+      const lyricsModalDetails = document.getElementById('lyricsModalDetails');
+      const lyricsQueueBtn = document.getElementById('lyricsQueueBtn');
+      let activeLyricsSongId = null;
+
+      const updateQueueBadge = () => {
+        if (queueBadgeCounter) {
+          queueBadgeCounter.textContent = queuedSongIds.length;
+        }
+      };
+      updateQueueBadge();
+
+      // Render Functions
+      const renderSongs = () => {
+        let filtered = songs.filter(song => {
+          // Genre filter
+          if (currentGenre !== 'all' && song.genre !== currentGenre && !song.genre.includes(currentGenre)) {
+            return false;
+          }
+          // Language filter
+          if (currentLang !== 'all' && !song.language.toLowerCase().includes(currentLang.toLowerCase())) {
+            return false;
+          }
+          // Difficulty filter
+          if (currentDiff !== 'all' && song.difficultyLevel !== currentDiff) {
+            return false;
+          }
+          // Search query
+          if (currentSearch.trim() !== '') {
+            const q = currentSearch.toLowerCase().trim();
+            const matchTitle = song.title.toLowerCase().includes(q);
+            const matchArtist = song.artist.toLowerCase().includes(q);
+            const matchSnippet = song.snippet.toLowerCase().includes(q);
+            const matchDecade = song.decade.toLowerCase().includes(q);
+            const matchGenre = song.genre.toLowerCase().includes(q);
+            if (!matchTitle && !matchArtist && !matchSnippet && !matchDecade && !matchGenre) {
+              return false;
+            }
+          }
+          return true;
+        });
+
+        // Sorting
+        filtered.sort((a, b) => {
+          if (currentSort === 'popular') return (b.plays || 0) - (a.plays || 0);
+          if (currentSort === 'title') return a.title.localeCompare(b.title);
+          if (currentSort === 'artist') return a.artist.localeCompare(b.artist);
+          if (currentSort === 'bpm') return (b.bpm || 0) - (a.bpm || 0);
+          return 0;
+        });
+
+        // Update counter
+        if (counterBadge) {
+          counterBadge.textContent = `${filtered.length} Tracks Available`;
+        }
+
+        if (filtered.length === 0) {
+          if (songsGrid) songsGrid.innerHTML = '';
+          if (emptyState) emptyState.classList.remove('hidden');
+          return;
+        }
+
+        if (emptyState) emptyState.classList.add('hidden');
+
+        if (songsGrid) {
+          songsGrid.innerHTML = filtered.map(song => {
+            const isQueued = queuedSongIds.includes(song.id);
+            const diffColor = song.difficultyLevel === 'Easy' 
+              ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' 
+              : song.difficultyLevel === 'Medium' 
+              ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30' 
+              : 'text-rose-400 bg-rose-500/10 border-rose-500/30';
+
+            return `
+              <div class="song-card glass-panel p-5 rounded-2xl border border-purple-800/40 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between group shadow-lg bg-[#140e29]/80">
+                <div>
+                  
+                  <!-- Top Row: Genre & Difficulty Pill -->
+                  <div class="flex items-center justify-between mb-3 text-[11px]">
+                    <span class="px-2.5 py-0.5 rounded-full font-bold bg-purple-950/80 text-pink-300 border border-purple-700/50">
+                      ${song.genre}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full font-semibold border ${diffColor}">
+                      ${song.difficultyLevel}: ${song.difficulty}
+                    </span>
+                  </div>
+
+                  <!-- Title & Artist -->
+                  <div class="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                      <h3 class="font-display font-black text-lg text-white group-hover:text-pink-300 transition-colors leading-snug">
+                        ${song.title}
+                      </h3>
+                      <p class="text-xs text-slate-400 font-medium">${song.artist}</p>
+                    </div>
+
+                    <button class="preview-lyrics-btn w-8 h-8 rounded-xl bg-purple-900/40 text-slate-300 hover:text-cyan-400 hover:bg-purple-800/60 flex items-center justify-center transition shrink-0" 
+                            title="Preview Lyrics" data-id="${song.id}">
+                      <i class="bi bi-chat-quote text-xs"></i>
+                    </button>
+                  </div>
+
+                  <!-- Meta Info Bar: Language, Key, Duration -->
+                  <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-400 mt-3 pt-2.5 border-t border-purple-800/30">
+                    <span class="flex items-center gap-1">
+                      <i class="bi bi-globe text-cyan-400"></i> ${song.language}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i class="bi bi-music-note text-pink-400"></i> Key: ${song.key}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <i class="bi bi-clock text-amber-400"></i> ${song.duration}
+                    </span>
+                  </div>
+
+                  <!-- Lyrics Teaser -->
+                  <p class="text-xs text-slate-400 italic mt-3 bg-purple-950/40 p-2.5 rounded-xl border border-purple-900/40 line-clamp-2">
+                    "${song.snippet}"
+                  </p>
+
+                </div>
+
+                <!-- Card Bottom Action Row -->
+                <div class="mt-4 pt-3 border-t border-purple-800/30 flex items-center justify-between gap-2">
+                  <div class="text-[11px] text-slate-400 truncate max-w-[150px]">
+                    <span class="text-slate-500">Suite:</span> <span class="text-pink-300 font-medium">${song.roomRecommendation || 'Any'}</span>
+                  </div>
+
+                  <button class="queue-toggle-btn px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${isQueued ? 'bg-emerald-600/30 border border-emerald-500/60 text-emerald-300' : 'btn-neon-primary'}" 
+                          data-id="${song.id}">
+                    <i class="bi ${isQueued ? 'bi-check-circle-fill text-emerald-400' : 'bi-plus-lg'}"></i>
+                    <span>${isQueued ? 'Queued' : 'Add to Queue'}</span>
+                  </button>
+                </div>
+
+              </div>
+            `;
+          }).join('');
+
+          // Bind card buttons
+          bindCardEvents();
+        }
+      };
+
+      const bindCardEvents = () => {
+        // Queue Toggle
+        document.querySelectorAll('.queue-toggle-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = btn.getAttribute('data-id');
+            const song = songs.find(s => s.id === id);
+            if (!song) return;
+
+            if (queuedSongIds.includes(id)) {
+              queuedSongIds = queuedSongIds.filter(item => item !== id);
+              if (window.Toast) window.Toast.info(`Removed "${song.title}" from your Suite Queue.`);
+            } else {
+              queuedSongIds.push(id);
+              if (window.Toast) window.Toast.neon(`Added "${song.title}" to your Suite Queue! 🎶`);
+            }
+
+            localStorage.setItem('vox_queued_songs', JSON.stringify(queuedSongIds));
+            updateQueueBadge();
+            renderSongs();
+          });
+        });
+
+        // Lyrics Preview
+        document.querySelectorAll('.preview-lyrics-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const song = songs.find(s => s.id === id);
+            if (!song) return;
+
+            activeLyricsSongId = id;
+            if (lyricsModalTitle) lyricsModalTitle.textContent = song.title;
+            if (lyricsModalArtist) lyricsModalArtist.textContent = song.artist;
+            if (lyricsModalSnippet) lyricsModalSnippet.textContent = `"${song.snippet}"`;
+            if (lyricsModalDetails) lyricsModalDetails.textContent = `Key: ${song.key} • BPM: ${song.bpm} • ${song.duration}`;
+
+            if (lyricsQueueBtn) {
+              const isQ = queuedSongIds.includes(id);
+              lyricsQueueBtn.innerHTML = isQ ? '<i class="bi bi-check"></i> Queued' : '<i class="bi bi-plus-circle"></i> Add to Queue';
+            }
+
+            openLyricsModal();
+          });
+        });
+      };
+
+      // Modal Handlers
+      const openLyricsModal = () => {
+        if (!lyricsModal) return;
+        lyricsModal.classList.remove('hidden');
+        requestAnimationFrame(() => lyricsModal.classList.add('opacity-100'));
+      };
+      const closeLyricsModal = () => {
+        if (!lyricsModal) return;
+        lyricsModal.classList.remove('opacity-100');
+        setTimeout(() => lyricsModal.classList.add('hidden'), 300);
+      };
+      if (closeLyricsModalBtn) closeLyricsModalBtn.addEventListener('click', closeLyricsModal);
+      if (lyricsModal) {
+        lyricsModal.addEventListener('click', (e) => {
+          if (e.target === lyricsModal) closeLyricsModal();
+        });
+      }
+
+      if (lyricsQueueBtn) {
+        lyricsQueueBtn.addEventListener('click', () => {
+          if (!activeLyricsSongId) return;
+          const song = songs.find(s => s.id === activeLyricsSongId);
+          if (!song) return;
+
+          if (!queuedSongIds.includes(activeLyricsSongId)) {
+            queuedSongIds.push(activeLyricsSongId);
+            localStorage.setItem('vox_queued_songs', JSON.stringify(queuedSongIds));
+            updateQueueBadge();
+            if (window.Toast) window.Toast.neon(`Added "${song.title}" to your Suite Queue! 🎶`);
+            renderSongs();
+            closeLyricsModal();
+          }
+        });
+      }
+
+      // Queue Drawer Modal
+      const openQueueModal = () => {
+        if (!queueModal || !queuedSongsList) return;
+        
+        if (queuedSongIds.length === 0) {
+          queuedSongsList.innerHTML = `
+            <div class="text-center py-8 text-slate-400">
+              <i class="bi bi-music-note text-3xl text-slate-500 mb-2 block"></i>
+              <p class="text-sm font-semibold">Your queue is currently empty</p>
+              <p class="text-xs text-slate-500 mt-1">Browse the catalogue and click "Add to Queue" to build your session setlist.</p>
+            </div>
+          `;
+        } else {
+          queuedSongsList.innerHTML = queuedSongIds.map((id, index) => {
+            const s = songs.find(item => item.id === id);
+            if (!s) return '';
+            return `
+              <div class="flex items-center justify-between p-3 rounded-xl bg-purple-950/40 border border-purple-800/40 text-xs">
+                <div class="flex items-center gap-3 truncate">
+                  <span class="w-6 h-6 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold text-[10px]">
+                    ${index + 1}
+                  </span>
+                  <div class="truncate">
+                    <p class="font-bold text-white truncate">${s.title}</p>
+                    <p class="text-[11px] text-slate-400 truncate">${s.artist} • ${s.duration}</p>
+                  </div>
+                </div>
+
+                <button class="remove-from-queue-btn text-rose-400 hover:text-rose-300 p-1.5 transition" data-id="${s.id}">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            `;
+          }).join('');
+
+          // Bind remove buttons
+          queuedSongsList.querySelectorAll('.remove-from-queue-btn').forEach(b => {
+            b.addEventListener('click', () => {
+              const id = b.getAttribute('data-id');
+              queuedSongIds = queuedSongIds.filter(item => item !== id);
+              localStorage.setItem('vox_queued_songs', JSON.stringify(queuedSongIds));
+              updateQueueBadge();
+              renderSongs();
+              openQueueModal();
+            });
+          });
+        }
+
+        queueModal.classList.remove('hidden');
+        requestAnimationFrame(() => queueModal.classList.add('opacity-100'));
+      };
+
+      const closeQueueModal = () => {
+        if (!queueModal) return;
+        queueModal.classList.remove('opacity-100');
+        setTimeout(() => queueModal.classList.add('hidden'), 300);
+      };
+
+      if (queueDrawerTrigger) queueDrawerTrigger.addEventListener('click', openQueueModal);
+      if (closeQueueModalBtn) closeQueueModalBtn.addEventListener('click', closeQueueModal);
+      if (queueModal) {
+        queueModal.addEventListener('click', (e) => {
+          if (e.target === queueModal) closeQueueModal();
+        });
+      }
+
+      if (clearQueueBtn) {
+        clearQueueBtn.addEventListener('click', () => {
+          queuedSongIds = [];
+          localStorage.removeItem('vox_queued_songs');
+          updateQueueBadge();
+          renderSongs();
+          openQueueModal();
+          if (window.Toast) window.Toast.info('Queue cleared.');
+        });
+      }
+
+      // Filter Handlers
+      genrePills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          genrePills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentGenre = pill.getAttribute('data-genre') || 'all';
+          renderSongs();
+        });
+      });
+
+
+      if (langSelect) {
+        langSelect.addEventListener('change', (e) => {
+          currentLang = e.target.value;
+          renderSongs();
+        });
+      }
+
+      if (diffSelect) {
+        diffSelect.addEventListener('change', (e) => {
+          currentDiff = e.target.value;
+          renderSongs();
+        });
+      }
+
+      if (sortBySelect) {
+        sortBySelect.addEventListener('change', (e) => {
+          currentSort = e.target.value;
+          renderSongs();
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentSearch = e.target.value;
+          if (clearSearchBtn) {
+            if (currentSearch.trim()) {
+              clearSearchBtn.classList.remove('hidden');
+            } else {
+              clearSearchBtn.classList.add('hidden');
+            }
+          }
+          renderSongs();
+        });
+      }
+
+      if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', () => {
+          if (searchInput) searchInput.value = '';
+          currentSearch = '';
+          clearSearchBtn.classList.add('hidden');
+          renderSongs();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          currentGenre = 'all';
+          currentLang = 'all';
+          currentDiff = 'all';
+          currentSearch = '';
+          if (searchInput) searchInput.value = '';
+          if (langSelect) langSelect.value = 'all';
+          if (diffSelect) diffSelect.value = 'all';
+          genrePills.forEach(p => {
+            if (p.getAttribute('data-genre') === 'all') p.classList.add('active');
+            else p.classList.remove('active');
+          });
+          renderSongs();
+        });
+      }
+
+      // Initial Render
+      renderSongs();
+    });
+  </script>
+
+</body>
+</html>

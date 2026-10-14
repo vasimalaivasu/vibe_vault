@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Themed Karaoke Suites & Rooms | VibeVault</title>
+  <meta name="description" content="Browse 12 private themed karaoke suites organized by capacity. From intimate duo rooms to 40-singer grand party halls with concert audio.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#0B0914', surface: '#120E24', card: '#181236', purple: '#8B5CF6' },
+            neon: { pink: '#FF007F', cyan: '#00F0FF', purple: '#A855F7', orange: '#FF5E3A' }
+          },
+          fontFamily: { display: ['Outfit', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fast Theme & Direction Initializer -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('vox_theme');
+        const theme = t ? JSON.parse(t) : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+        const d = localStorage.getItem('vox_direction');
+        if (d) {
+          const dir = JSON.parse(d);
+          document.documentElement.setAttribute('dir', dir);
+          if (dir === 'rtl') document.documentElement.classList.add('rtl');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Custom Theme Styles with Cache Busting -->
+  <link rel="stylesheet" href="assets/css/main.css?v=3.7">
+  <style id="vox-wishlist-fixed">
+    .favorite-room-btn,
+    [data-favorite-room] {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      line-height: 1 !important;
+      box-sizing: border-box !important;
+    }
+    .favorite-room-btn svg,
+    [data-favorite-room] svg {
+      display: block !important;
+      width: 1.05rem !important;
+      height: 1.05rem !important;
+      margin: auto !important;
+      pointer-events: none !important;
+      transform-origin: center center !important;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-pink-600 selection:text-white">
+
+  <!-- Navbar Mount Point -->
+  <div id="navbar-mount"></div>
+
+  <!-- Page Header Banner -->
+  <section class="pt-32 pb-14 relative overflow-hidden bg-gradient-to-b from-[#130d2a] to-[#0B0914] border-b border-purple-900/30">
+    <div class="ambient-glow-pink -top-20 -left-20 opacity-30"></div>
+    <div class="ambient-glow-cyan -top-20 -right-20 opacity-30"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">
+        <i class="bi bi-disc"></i> 12 Immersive Music Worlds
+      </span>
+      <h1 class="font-display font-black text-4xl sm:text-6xl text-white tracking-tight">
+        Themed Karaoke Suites & Private Rooms
+      </h1>
+      <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-light">
+        Organized by guest capacity. Every private room includes touchscreen song queuing, Shure wireless microphones, acoustic soundproofing, and in-room bar service.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filter Controls & Rooms Grid Section -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Capacity Tabs -->
+      <div class="flex items-center justify-start sm:justify-center overflow-x-auto gap-2 pb-4 mb-8" id="capacityFilterTabs">
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-pink-600 text-white shadow-lg transition" data-tier="all">
+          All Suites (12)
+        </button>
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-purple-950/60 text-slate-300 border border-purple-800/40 hover:text-white transition" data-tier="mini">
+          Mini (2–4 Guests)
+        </button>
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-purple-950/60 text-slate-300 border border-purple-800/40 hover:text-white transition" data-tier="standard">
+          Standard (5–8 Guests)
+        </button>
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-purple-950/60 text-slate-300 border border-purple-800/40 hover:text-white transition" data-tier="party">
+          Party (9–15 Guests)
+        </button>
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-purple-950/60 text-slate-300 border border-purple-800/40 hover:text-white transition" data-tier="vip">
+          VIP Lounge (16–25)
+        </button>
+        <button class="capacity-tab-btn px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap bg-purple-950/60 text-slate-300 border border-purple-800/40 hover:text-white transition" data-tier="grand">
+          Grand Hall (26–40)
+        </button>
+      </div>
+
+      <!-- Search, Theme & Sort Controls Bar -->
+      <div class="glass-panel p-4 rounded-2xl border border-purple-800/40 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
+        
+        <!-- Live Search -->
+        <div class="relative">
+          <i class="bi bi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+          <input type="text" id="roomsSearchInput" placeholder="Search room name or theme..."
+                 class="w-full pl-9 pr-3 py-2 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500">
+        </div>
+
+        <!-- Theme Filter Dropdown -->
+        <div>
+          <select id="roomsThemeSelect"
+                  class="w-full px-3 py-2 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white text-xs focus:outline-none focus:border-pink-500 font-medium">
+            <option value="all">All Aesthetic Themes</option>
+            <option value="Retro Synthwave">Retro Synthwave 80s</option>
+            <option value="K-Pop & Idol">K-Pop Idol Studio</option>
+            <option value="Rock & Metal">Rock & Metal Legends</option>
+            <option value="Urban & Hip-Hop">Hip-Hop Boombox</option>
+            <option value="Disco & Funk">Disco & Funk Studio</option>
+            <option value="Anime & Cyberpunk">Anime Cyberpunk</option>
+            <option value="Bollywood & Desi">Bollywood Beats</option>
+            <option value="Jazz & Speakeasy">Midnight Jazz Speakeasy</option>
+            <option value="VIP Luxury">Royal Penthouse Suite</option>
+            <option value="Grand Corporate & Event">Grand Symphony Hall</option>
+          </select>
+        </div>
+
+        <!-- Price Range Sort -->
+        <div>
+          <select id="roomsSortSelect"
+                  class="w-full px-3 py-2 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white text-xs focus:outline-none focus:border-pink-500 font-medium">
+            <option value="popular">Sort: Popularity / Rating</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="capacity-asc">Capacity: Small to Large</option>
+            <option value="capacity-desc">Capacity: Large to Small</option>
+          </select>
+        </div>
+
+        <!-- Result Count & Reset Button -->
+        <div class="flex items-center justify-between sm:justify-end gap-3 text-xs text-slate-400">
+          <span id="roomsMatchCount" class="font-bold text-white">Showing 12 Rooms</span>
+          <button id="resetFiltersBtn" class="text-pink-400 hover:underline">Reset</button>
+        </div>
+
+      </div>
+
+      <!-- Rooms Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="roomsListingGrid">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer Mount Point -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data/images.js"></script>
+  <script src="assets/js/data/rooms-data.js"></script>
+  <script src="assets/js/data/packages-data.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- Interactive Rooms Filter Controller -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('roomsListingGrid');
+      const tabs = document.querySelectorAll('.capacity-tab-btn');
+      const searchInput = document.getElementById('roomsSearchInput');
+      const themeSelect = document.getElementById('roomsThemeSelect');
+      const sortSelect = document.getElementById('roomsSortSelect');
+      const matchCount = document.getElementById('roomsMatchCount');
+      const resetBtn = document.getElementById('resetFiltersBtn');
+
+      let currentTier = 'all';
+      let currentTheme = 'all';
+      let currentSort = 'popular';
+      let currentSearch = '';
+
+      // Check URL query parameters for pre-selected theme or tier
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryTier = urlParams.get('tier');
+      const queryTheme = urlParams.get('theme');
+
+      if (queryTier) currentTier = queryTier;
+      if (queryTheme) {
+        if (queryTheme === 'retro') currentTheme = 'Retro Synthwave';
+        if (queryTheme === 'kpop') currentTheme = 'K-Pop & Idol';
+        if (queryTheme === 'rock') currentTheme = 'Rock & Metal';
+        if (queryTheme === 'disco') currentTheme = 'Disco & Funk';
+        if (queryTheme === 'jazz') currentTheme = 'Jazz & Speakeasy';
+        if (queryTheme === 'vip') currentTheme = 'VIP Luxury';
+        if (themeSelect) themeSelect.value = currentTheme;
+      }
+
+      const renderRooms = () => {
+        let rooms = [...(window.VOX_ROOMS || [])];
+
+        // Filter by capacity tier
+        if (currentTier !== 'all') {
+          rooms = rooms.filter(r => r.capacityTier === currentTier);
+        }
+
+        // Filter by theme
+        if (currentTheme !== 'all') {
+          rooms = rooms.filter(r => r.theme.toLowerCase().includes(currentTheme.toLowerCase()));
+        }
+
+        // Filter by search
+        if (currentSearch) {
+          const q = currentSearch.toLowerCase();
+          rooms = rooms.filter(r => r.name.toLowerCase().includes(q) || r.theme.toLowerCase().includes(q) || r.description.toLowerCase().includes(q));
+        }
+
+        // Sort
+        if (currentSort === 'price-asc') {
+          rooms.sort((a, b) => a.pricePerHour - b.pricePerHour);
+        } else if (currentSort === 'price-desc') {
+          rooms.sort((a, b) => b.pricePerHour - a.pricePerHour);
+        } else if (currentSort === 'capacity-asc') {
+          rooms.sort((a, b) => a.capacityMin - b.capacityMin);
+        } else if (currentSort === 'capacity-desc') {
+          rooms.sort((a, b) => b.capacityMax - a.capacityMax);
+        } else {
+          // Popularity / Rating
+          rooms.sort((a, b) => b.rating - a.rating);
+        }
+
+        if (matchCount) {
+          matchCount.textContent = `Showing ${rooms.length} Room${rooms.length === 1 ? '' : 's'}`;
+        }
+
+        if (rooms.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-16 text-center glass-panel rounded-3xl border border-purple-800/40 space-y-3">
+              <i class="bi bi-disc text-4xl empty-state-icon"></i>
+              <h3 class="font-display font-bold text-xl text-white">No Suites Match Your Filters</h3>
+              <p class="text-xs text-slate-400">Try loosening your capacity filter or clearing the search keyword.</p>
+              <button onclick="document.getElementById('resetFiltersBtn').click()" class="btn-neon-primary px-5 py-2 text-xs">
+                Reset All Filters
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = rooms.map(room => `
+          <div class="room-card glass-panel p-5 rounded-3xl border border-purple-800/40 hover:border-cyan-500/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div class="relative h-56 rounded-2xl overflow-hidden mb-4">
+                <img src="${room.image}" alt="${room.name}" class="card-img w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0B0914] via-transparent to-transparent"></div>
+                
+                <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-[#0b0914]/80 backdrop-blur-md text-cyan-300 border border-cyan-500/30">
+                  <i class="bi bi-people-fill mr-1"></i> ${room.capacityText}
+                </span>
+
+                <button data-favorite-room="${room.id}"
+                        title="${window.StorageManager && window.StorageManager.isFavorite(room.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}"
+                        aria-label="Wishlist toggle for ${room.name}"
+                        class="favorite-room-btn ${window.StorageManager && window.StorageManager.isFavorite(room.id) ? 'is-favorite' : ''} absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center p-0 transition-all duration-200">
+                  <svg class="w-4 h-4 heart-svg pointer-events-none transition-transform" viewBox="0 0 24 24" fill="${window.StorageManager && window.StorageManager.isFavorite(room.id) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                  </svg>
+                </button>
+
+                <span class="absolute bottom-3 right-3 px-3.5 py-1.5 rounded-xl text-xs font-black bg-pink-600 text-white shadow-lg">
+                  $${room.pricePerHour}/hr
+                </span>
+              </div>
+
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">${room.theme}</span>
+                  <div class="flex items-center gap-1 text-xs text-amber-400 font-bold">
+                    <i class="bi bi-star-fill"></i> ${room.rating} (${room.reviewsCount})
+                  </div>
+                </div>
+                <h3 class="font-display font-bold text-white text-xl">${room.name}</h3>
+                <p class="text-xs text-slate-400 line-clamp-2">${room.tagline}</p>
+              </div>
+
+              <!-- Key Amenities Grid Icons -->
+              <div class="grid grid-cols-3 gap-2 pt-4">
+                ${room.amenities.slice(0, 3).map(a => `
+                  <div class="p-2 rounded-xl bg-purple-950/40 border border-purple-800/40 text-[10px] text-slate-300 flex items-center gap-1.5 truncate">
+                    <i class="bi ${a.icon} text-pink-400"></i> <span class="truncate">${a.name}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-purple-800/30 flex items-center justify-between">
+              <button onclick="window.openRoomDetailsModal('${room.id}')"
+                      class="text-xs font-bold text-slate-300 hover:text-cyan-400 transition flex items-center gap-1">
+                <span>View Details</span> <i class="bi bi-arrow-right"></i>
+              </button>
+              <a href="dashboard.html?roomId=${room.id}#book"
+                 class="btn-neon-primary px-4 py-2 text-xs">
+                <i class="bi bi-calendar-plus"></i> Book Now
+              </a>
+            </div>
+          </div>
+        `).join('');
+      };
+
+      // Tab handlers
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('bg-pink-600', 'text-white', 'shadow-lg');
+            t.classList.add('bg-purple-950/60', 'text-slate-300');
+          });
+          tab.classList.remove('bg-purple-950/60', 'text-slate-300');
+          tab.classList.add('bg-pink-600', 'text-white', 'shadow-lg');
+
+          currentTier = tab.getAttribute('data-tier') || 'all';
+          renderRooms();
+        });
+      });
+
+      if (searchInput) searchInput.addEventListener('input', (e) => { currentSearch = e.target.value.trim(); renderRooms(); });
+      if (themeSelect) themeSelect.addEventListener('change', (e) => { currentTheme = e.target.value; renderRooms(); });
+      if (sortSelect) sortSelect.addEventListener('change', (e) => { currentSort = e.target.value; renderRooms(); });
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          currentTier = 'all';
+          currentTheme = 'all';
+          currentSort = 'popular';
+          currentSearch = '';
+          if (searchInput) searchInput.value = '';
+          if (themeSelect) themeSelect.value = 'all';
+          if (sortSelect) sortSelect.value = 'popular';
+          tabs.forEach(t => {
+            if (t.getAttribute('data-tier') === 'all') {
+              t.classList.add('bg-pink-600', 'text-white', 'shadow-lg');
+              t.classList.remove('bg-purple-950/60', 'text-slate-300');
+            } else {
+              t.classList.remove('bg-pink-600', 'text-white', 'shadow-lg');
+              t.classList.add('bg-purple-950/60', 'text-slate-300');
+            }
+          });
+          renderRooms();
+        });
+      }
+
+      // Initial render
+      renderRooms();
+    });
+  </script>
+
+</body>
+</html>

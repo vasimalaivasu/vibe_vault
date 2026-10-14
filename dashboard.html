@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Customer VIP Dashboard | VibeVault</title>
+  <meta name="description" content="Manage your karaoke room bookings, track party session status in real-time, print invoices, and reserve add-ons.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#0B0914', surface: '#120E24', card: '#181236', purple: '#8B5CF6' },
+            neon: { pink: '#FF007F', cyan: '#00F0FF', purple: '#A855F7', orange: '#FF5E3A' }
+          },
+          fontFamily: { display: ['Outfit', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fast Theme & Direction Initializer -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('vox_theme');
+        const theme = t ? JSON.parse(t) : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+        const d = localStorage.getItem('vox_direction');
+        if (d) {
+          const dir = JSON.parse(d);
+          document.documentElement.setAttribute('dir', dir);
+          if (dir === 'rtl') document.documentElement.classList.add('rtl');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Custom Theme Styles with Cache Busting -->
+  <link rel="stylesheet" href="assets/css/main.css?v=3.7">
+</head>
+<body class="antialiased min-h-screen flex selection:bg-pink-600 selection:text-white overflow-x-hidden">
+
+  <!-- Mobile Overlay for Sidebar -->
+  <div id="dashSidebarOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+  <!-- ============================================================== -->
+  <!-- SIDEBAR (Fixed Desktop, Offcanvas Mobile)                     -->
+  <!-- ============================================================== -->
+  <aside id="dashSidebar"
+         class="fixed lg:sticky top-0 left-0 h-screen w-72 shrink-0 self-start bg-[#0e0921] border-r border-purple-900/40 z-40 lg:z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out flex flex-col justify-between p-5 shadow-2xl overflow-y-auto">
+    
+    <!-- Sidebar Top: Brand & User Profile Snippet -->
+    <div class="space-y-6">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center justify-between pb-4 border-b border-purple-800/40">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-600 to-cyan-400 p-0.5 shadow-md">
+            <div class="w-full h-full bg-[#0b0914] rounded-[10px] flex items-center justify-center">
+              <i class="bi bi-soundwave text-lg text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400"></i>
+            </div>
+          </div>
+          <span class="font-display font-black text-xl text-white">VIBE<span class="text-neon-pink">VAULT</span></span>
+        </a>
+
+        <button id="dashSidebarCloseBtn" class="lg:hidden text-slate-400 hover:text-white p-1">
+          <i class="bi bi-x-lg text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-1.5 text-xs">
+        
+        <button onclick="window.dashboard.setSection('overview')" data-section="overview"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-speedometer2 text-base text-cyan-400"></i>
+          <span>Overview</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('book')" data-section="book"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-calendar-plus text-base text-pink-400"></i>
+          <span>Book a Room</span>
+          <span class="ml-auto text-[9px] bg-pink-500/20 text-pink-300 px-1.5 py-0.5 rounded font-bold">Wizard</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('reservations')" data-section="reservations"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-calendar-check text-base text-emerald-400"></i>
+          <span>My Reservations</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('addons')" data-section="addons"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-basket2 text-base text-amber-400"></i>
+          <span>Add-ons & Food</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('favorites')" data-section="favorites"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-heart text-base text-rose-400"></i>
+          <span>Saved Rooms</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('notifications')" data-section="notifications"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-bell text-base text-purple-400"></i>
+          <span>Notifications</span>
+          <span id="dashNotifBadge" class="ml-auto text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full font-bold">3</span>
+        </button>
+
+        <button onclick="window.dashboard.setSection('profile')" data-section="profile"
+                class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
+          <i class="bi bi-person text-base text-blue-400"></i>
+          <span>Singer Profile</span>
+        </button>
+
+      </nav>
+
+    </div>
+
+    <!-- Sidebar Bottom: User Card & Sign Out -->
+    <div class="pt-4 border-t border-purple-800/40 space-y-3">
+      
+      <div class="flex items-center gap-3 p-2 rounded-2xl bg-purple-950/40 border border-purple-800/40">
+        <img id="sidebarUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
+             alt="User" class="w-9 h-9 rounded-xl object-cover ring-2 ring-pink-500">
+        <div class="overflow-hidden flex-1">
+          <p id="sidebarUserName" class="font-bold text-white text-xs truncate">Alex Vance</p>
+          <p class="text-[10px] text-pink-400 font-semibold truncate">Gold VIP Vocalist</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <a href="index.html" class="p-2 rounded-xl bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white text-[11px] font-bold text-center transition">
+          <i class="bi bi-arrow-left"></i> Home
+        </a>
+        <button id="dashboardLogoutBtn" onclick="if (window.StorageManager) window.StorageManager.logout(); else { localStorage.removeItem('vox_current_user'); localStorage.setItem('vox_user_logged_out','true'); } if (window.Toast) window.Toast.info('Logged out successfully.'); setTimeout(() => window.location.href = 'index.html', 300);"
+                class="p-2 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 hover:text-white text-[11px] font-bold text-center transition cursor-pointer flex items-center justify-center gap-1.5">
+          <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+        </button>
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- ============================================================== -->
+  <!-- MAIN CONTENT AREA & TOPBAR                                    -->
+  <!-- ============================================================== -->
+  <div class="flex-1 min-w-0 flex flex-col min-h-screen">
+    
+    <!-- Topbar -->
+    <header class="h-20 sm:h-22 px-4 sm:px-8 lg:px-10 border-b border-purple-900/30 flex items-center justify-between bg-[#0b0914]/90 backdrop-blur-md sticky top-0 z-30">
+      
+      <!-- Left: Mobile Menu Trigger & Breadcrumb -->
+      <div class="flex items-center gap-3.5">
+        <button id="dashSidebarOpenBtn" class="lg:hidden w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-800/50 text-white flex items-center justify-center">
+          <i class="bi bi-list text-xl"></i>
+        </button>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span class="text-xs font-semibold text-slate-300 hidden sm:inline">VibeVault VIP Studio Portal</span>
+          <span class="text-xs text-slate-600 hidden sm:inline">•</span>
+          <span class="text-xs text-pink-400 font-bold hidden md:inline">Downtown Lounge</span>
+        </div>
+      </div>
+
+      <!-- Right: Quick Actions -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Live Quick Book CTA -->
+        <button onclick="window.dashboard.setSection('book')" class="btn-neon-primary px-5 py-2.5 rounded-full text-xs font-bold hidden sm:flex items-center gap-2 shadow-[0_0_15px_rgba(255,0,127,0.3)]">
+          <i class="bi bi-calendar-plus text-sm"></i>
+          <span>Instant Book</span>
+        </button>
+
+        <!-- Unified Quick Controls Pill (Theme + RTL) -->
+        <div class="flex items-center bg-purple-950/40 border border-purple-800/40 rounded-full p-1 backdrop-blur-md">
+          <button id="dashThemeToggleBtn" onclick="window.StorageManager.toggleTheme(); setTimeout(() => location.reload(), 200);"
+                  title="Toggle Dark/Light Mode" aria-label="Toggle Theme"
+                  class="w-8 h-8 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-purple-900/50 flex items-center justify-center transition">
+            <i class="bi bi-moon-stars-fill text-xs"></i>
+          </button>
+          <span class="w-px h-3.5 bg-purple-800/60 mx-0.5"></span>
+          <button id="dashRtlToggleBtn" onclick="window.StorageManager.toggleDirection(); setTimeout(() => location.reload(), 200);"
+                  title="Toggle RTL / LTR" aria-label="Toggle RTL"
+                  class="px-2.5 h-8 rounded-full text-xs font-bold text-slate-300 hover:text-pink-400 hover:bg-purple-900/50 flex items-center justify-center gap-1 transition">
+            <span>RTL</span>
+          </button>
+        </div>
+
+        <!-- Notifications Bell -->
+        <button onclick="window.dashboard.setSection('notifications')"
+                title="Notifications" aria-label="View Notifications"
+                class="w-9 h-9 rounded-full bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-pink-400 flex items-center justify-center transition relative">
+          <i class="bi bi-bell-fill text-xs"></i>
+          <span class="absolute 1.5 top-1.5 right-1.5 w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- Dynamic Section View Mount -->
+    <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-[1536px] mx-auto w-full" id="dashMainContent">
+      <!-- Injected dynamically by assets/js/dashboard.js -->
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data/images.js"></script>
+  <script src="assets/js/data/rooms-data.js"></script>
+  <script src="assets/js/data/packages-data.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/booking-stepper.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync user info into sidebar
+      let user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+      if (!user && window.StorageManager) {
+        const demoLogin = window.StorageManager.login('demo@partyroom.com', 'Demo@123');
+        if (demoLogin.success) user = demoLogin.user;
+      }
+
+      if (user) {
+        const nameEl = document.getElementById('sidebarUserName');
+        const avatarEl = document.getElementById('sidebarUserAvatar');
+        if (nameEl) nameEl.textContent = user.name;
+        if (avatarEl && user.avatar) avatarEl.src = user.avatar;
+      }
+
+      // Initialize theme toggle button icon & RTL label
+      const themeBtn = document.getElementById('dashThemeToggleBtn');
+      if (themeBtn && window.StorageManager) {
+        const curTheme = window.StorageManager.getTheme();
+        themeBtn.innerHTML = `<i class="bi ${curTheme === 'light' ? 'bi-moon-stars-fill text-amber-500' : 'bi-sun-fill text-yellow-300'} text-xs"></i>`;
+      }
+      const rtlBtn = document.getElementById('dashRtlToggleBtn');
+      if (rtlBtn && window.StorageManager) {
+        const curDir = window.StorageManager.getDirection();
+        rtlBtn.innerHTML = `<span>${curDir === 'rtl' ? 'LTR' : 'RTL'}</span>`;
+      }
+
+      // Initialize Dashboard
+      window.dashboard = new VoxDashboard();
+    });
+  </script>
+
+</body>
+</html>

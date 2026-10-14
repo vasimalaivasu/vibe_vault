@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>House Rules & Terms of Service | VibeVault</title>
+  <meta name="description" content="Review VibeVault venue policies, cancellation windows, deposit handling, age guidelines and hygiene standards.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#0B0914', surface: '#120E24', card: '#181236', purple: '#8B5CF6' },
+            neon: { pink: '#FF007F', cyan: '#00F0FF', purple: '#A855F7', orange: '#FF5E3A' }
+          },
+          fontFamily: { display: ['Outfit', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fast Theme & Direction Initializer -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('vox_theme');
+        const theme = t ? JSON.parse(t) : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+        const d = localStorage.getItem('vox_direction');
+        if (d) {
+          const dir = JSON.parse(d);
+          document.documentElement.setAttribute('dir', dir);
+          if (dir === 'rtl') document.documentElement.classList.add('rtl');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Custom Theme Styles with Cache Busting -->
+  <link rel="stylesheet" href="assets/css/main.css?v=3.7">
+</head>
+<body class="antialiased selection:bg-pink-600 selection:text-white">
+
+  <!-- Navbar Mount Point -->
+  <div id="navbar-mount"></div>
+
+  <!-- Header Banner -->
+  <section class="pt-32 pb-14 relative overflow-hidden bg-gradient-to-b from-[#140b2a] to-[#0B0914] border-b border-purple-900/30">
+    <div class="ambient-glow-pink -top-20 -left-20 opacity-30"></div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-3">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">
+        <i class="bi bi-shield-check"></i> Guest Safety & Policies
+      </span>
+      <h1 class="font-display font-black text-4xl sm:text-5xl text-white tracking-tight">
+        House Rules & Booking Policies
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-300">
+        Last updated October 2026. Designed to preserve acoustic enjoyment, cleanliness, and a safe atmosphere for every singer squad.
+      </p>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- Section 1: House Rules -->
+      <div id="rules" class="glass-panel scroll-mt-28 sm:scroll-mt-32 transition-all duration-500 p-6 sm:p-8 rounded-3xl border border-purple-800/40 space-y-4">
+        <div class="flex items-center gap-3 text-pink-400 font-display font-bold text-xl">
+          <i class="bi bi-music-note-list text-2xl"></i>
+          <h2 class="text-white">1. General House Rules</h2>
+        </div>
+        <ul class="space-y-2.5 text-xs text-slate-300 leading-relaxed list-disc list-inside">
+          <li><strong>Zero Vaping / Smoking:</strong> All private karaoke suites are strictly non-smoking. Smoke alarms and automated ventilation units are active. Designated outdoor smoking lounges are available on Ground and Rooftop levels.</li>
+          <li><strong>Sound Equipment Care:</strong> Our microphones are precision calibrated Shure and Sennheiser condenser units. Do not drop, throw or tap the microphone heads against table surfaces. Guests are responsible for physical equipment damages.</li>
+          <li><strong>Maximum Room Capacity:</strong> Room occupancy is strictly limited to posted building safety limits. Our concierge team reserves the right to request group size reductions if a room exceeds capacity.</li>
+          <li><strong>Respectful Conduct:</strong> Aggressive behavior or harassment towards staff or neighboring singers will result in immediate session termination without refund.</li>
+        </ul>
+      </div>
+
+      <!-- Section 2: Cancellation & Rescheduling -->
+      <div id="cancellation" class="glass-panel scroll-mt-28 sm:scroll-mt-32 transition-all duration-500 p-6 sm:p-8 rounded-3xl border border-purple-800/40 space-y-4">
+        <div class="flex items-center gap-3 text-cyan-400 font-display font-bold text-xl">
+          <i class="bi bi-calendar2-x text-2xl"></i>
+          <h2 class="text-white">2. Cancellation & Rescheduling Guarantee</h2>
+        </div>
+        <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+          <p>
+            We understand plans change! You can reschedule or cancel any reservation directly within your <strong>Customer Dashboard</strong>:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-800/40">
+              <span class="font-bold text-emerald-400 block mb-1">More Than 24 Hours in Advance</span>
+              <p class="text-[11px] text-slate-400">100% full refund of your 20% booking deposit, or free rescheduling to any future available date without fees.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-800/40">
+              <span class="font-bold text-amber-400 block mb-1">Within 24 Hours of Session</span>
+              <p class="text-[11px] text-slate-400">Deposit is converted into a 1-year valid VibeVault credit voucher applicable to any future lounge visit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Age Verification & Alcohol -->
+      <div id="age" class="glass-panel scroll-mt-28 sm:scroll-mt-32 transition-all duration-500 p-6 sm:p-8 rounded-3xl border border-purple-800/40 space-y-4">
+        <div class="flex items-center gap-3 text-amber-400 font-display font-bold text-xl">
+          <i class="bi bi-person-badge text-2xl"></i>
+          <h2 class="text-white">3. Age Guidelines & Bar Service</h2>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Singers of all ages are warmly welcomed before 8:00 PM every day! After 8:00 PM, all venue patrons must be 18 years or older (or accompanied by an adult guardian). Valid government-issued photo ID is required for alcoholic beverage service.
+        </p>
+      </div>
+
+      <!-- Section 4: Privacy & Data -->
+      <div id="privacy" class="glass-panel scroll-mt-28 sm:scroll-mt-32 transition-all duration-500 p-6 sm:p-8 rounded-3xl border border-purple-800/40 space-y-4">
+        <div class="flex items-center gap-3 text-purple-400 font-display font-bold text-xl">
+          <i class="bi bi-lock-fill text-2xl"></i>
+          <h2 class="text-white">4. Privacy Policy & Camera Disclosure</h2>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          For guest privacy, private karaoke rooms DO NOT contain operational audio recording or hidden surveillance cameras. Cameras are strictly located in common corridors, entrance lobbies, and emergency exits for security and safety enforcement.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer Mount Point -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data/images.js"></script>
+  <script src="assets/js/data/rooms-data.js"></script>
+  <script src="assets/js/data/packages-data.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    function highlightTermsTarget() {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const target = document.querySelector(hash);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          target.classList.add('ring-2', 'ring-pink-500', 'shadow-[0_0_30px_rgba(255,0,127,0.4)]');
+          setTimeout(() => {
+            target.classList.remove('ring-2', 'ring-pink-500', 'shadow-[0_0_30px_rgba(255,0,127,0.4)]');
+          }, 2400);
+        }, 100);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', highlightTermsTarget);
+    window.addEventListener('hashchange', highlightTermsTarget);
+  </script>
+
+</body>
+</html>

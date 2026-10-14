@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Nightlife & Vocal Journal | VibeVault Private Karaoke Suites</title>
+  <meta name="description" content="Expert guides on private karaoke party planning, vocal warm-ups, suite acoustic technology, and corporate celebrations from VibeVault sound directors.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#0B0914', surface: '#120E24', card: '#181236', purple: '#8B5CF6' },
+            neon: { pink: '#FF007F', cyan: '#00F0FF', purple: '#A855F7', orange: '#FF5E3A' }
+          },
+          fontFamily: { display: ['Outfit', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Fast Theme & Direction Initializer -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('vox_theme');
+        const theme = t ? JSON.parse(t) : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.add('light');
+          document.documentElement.classList.remove('dark');
+        }
+        const d = localStorage.getItem('vox_direction');
+        if (d) {
+          const dir = JSON.parse(d);
+          document.documentElement.setAttribute('dir', dir);
+          if (dir === 'rtl') document.documentElement.classList.add('rtl');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Custom Theme Styles with Cache Busting -->
+  <link rel="stylesheet" href="assets/css/main.css?v=3.7">
+</head>
+<body class="antialiased selection:bg-pink-600 selection:text-white bg-[#0b0914] text-slate-100 min-h-screen flex flex-col">
+
+  <!-- Navbar Mount Point -->
+  <div id="navbar-mount"></div>
+
+  <!-- Main Content Wrapper with Top Padding for Sticky Navbar -->
+  <main class="flex-grow pt-24 sm:pt-28 pb-20">
+
+    <!-- Hero Header Section -->
+    <section class="relative overflow-hidden py-12 sm:py-16 lg:py-20 border-b border-purple-900/30">
+      <!-- Ambient Glow Balls -->
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-cyan-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-6" aria-label="Breadcrumb">
+          <a href="index.html" class="hover:text-pink-400 transition flex items-center gap-1.5">
+            <i class="bi bi-house-door text-xs"></i> Home
+          </a>
+          <i class="bi bi-chevron-right text-[10px] text-slate-600"></i>
+          <span class="text-pink-400">Nightlife & Vocal Journal</span>
+        </nav>
+
+        <!-- Headline & Subtitle -->
+        <div class="max-w-3xl space-y-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-bold tracking-wide">
+            <i class="bi bi-journal-richtext text-pink-400"></i>
+            <span>VIBEVAULT EDITORIAL & PARTY INSIGHTS</span>
+          </div>
+
+          <h1 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1]">
+            Nightlife, Acoustics & <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400">Vocal Mastery</span>
+          </h1>
+
+          <p class="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
+            Curated playbooks on throwing epic private birthday concerts, hitting high notes safely, tuning studio reverb, and planning corporate sing-offs from our resident event hosts.
+          </p>
+
+          <!-- Stat Badges Ticker -->
+          <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-3 text-xs font-medium text-slate-300">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-950/40 border border-purple-800/40">
+              <i class="bi bi-file-earmark-text-fill text-pink-400"></i>
+              <span>6 Editorial Guides</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-950/40 border border-purple-800/40">
+              <i class="bi bi-music-note-beamed text-cyan-400"></i>
+              <span>120,000+ Backing Tracks</span>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-950/40 border border-purple-800/40">
+              <i class="bi bi-soundwave text-purple-400"></i>
+              <span>Dolby Atmos Architecture</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Content Body Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-14 space-y-12 sm:space-y-16">
+
+      <!-- Featured Spotlight Mount -->
+      <section id="blogFeaturedMount" aria-label="Featured Story">
+        <!-- Rendered dynamically by blog.js -->
+      </section>
+
+      <!-- Category Filter Pills & Search Bar -->
+      <section class="glass-panel p-4 sm:p-6 rounded-3xl border border-purple-800/40 space-y-4">
+        
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          
+          <!-- Category Pills (Scrollable on small screens) -->
+          <div id="blogCategoryPills" class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none flex-grow">
+            <!-- Injected via blog.js -->
+          </div>
+
+          <!-- Real-time Search Box -->
+          <div class="relative w-full md:w-80 flex-shrink-0">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="bi bi-search text-xs"></i>
+            </div>
+            <input type="text" 
+                   id="blogSearchInput" 
+                   placeholder="Search articles, tips, songs..." 
+                   class="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-purple-950/50 border border-purple-800/50 text-white placeholder-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
+            
+            <button type="button" 
+                    id="blogSearchClearBtn" 
+                    class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white"
+                    title="Clear search">
+              <i class="bi bi-x-circle-fill text-xs"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Filter Sub-header with Count -->
+        <div class="flex items-center justify-between pt-3 border-t border-purple-800/30 text-xs text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <i class="bi bi-funnel text-pink-400"></i>
+            <span>Showing:</span>
+            <strong id="blogArticlesCount" class="text-white font-bold">6 articles</strong>
+          </span>
+          <span class="hidden sm:inline text-slate-500">Updated weekly with new tips & audio guides</span>
+        </div>
+
+      </section>
+
+      <!-- Articles Grid Mount -->
+      <section>
+        <div id="blogGridMount" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Injected via blog.js -->
+        </div>
+
+        <!-- Empty State (When search returns 0 results) -->
+        <div id="blogNoResults" class="hidden glass-panel text-center py-16 px-4 rounded-3xl border border-purple-800/40 space-y-4 max-w-md mx-auto">
+          <div class="w-16 h-16 rounded-2xl bg-purple-900/40 text-pink-400 flex items-center justify-center mx-auto text-2xl">
+            <i class="bi bi-search"></i>
+          </div>
+          <h3 class="font-display font-bold text-xl text-white">No Matching Articles Found</h3>
+          <p class="text-xs text-slate-400">
+            We couldn't find any articles matching your search query. Try searching for "warmups", "birthday", "acoustics", or "K-Pop".
+          </p>
+          <button type="button" 
+                  onclick="document.getElementById('blogSearchInput').value=''; document.getElementById('blogSearchClearBtn').click();"
+                  class="btn-neon-primary px-5 py-2 text-xs">
+            Reset Filters
+          </button>
+        </div>
+      </section>
+
+      <!-- VIP Club & Vocal Newsletter CTA Banner -->
+      <section class="glass-panel p-8 sm:p-12 rounded-3xl border border-purple-800/40 bg-gradient-to-br from-purple-950/40 via-[#140e29] to-[#090614] relative overflow-hidden">
+        <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-pink-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-3xl mx-auto text-center space-y-6 relative z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold">
+            <i class="bi bi-envelope-heart text-cyan-400"></i>
+            <span>VIBEVAULT VIP BACKSTAGE PASS</span>
+          </div>
+
+          <h3 class="font-display font-black text-2xl sm:text-4xl text-white">
+            Get Weekly Vocal Hacks & Secret Suite Discounts
+          </h3>
+
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            Join 14,000+ vocalists and nightlife enthusiasts. We send curated weekend setlists, vocal warm-up audio drills, and exclusive promo codes for 15% off room rates.
+          </p>
+
+          <form id="newsletterForm" onsubmit="event.preventDefault(); if (window.Toast) { window.Toast.neon('Welcome to the VIP Backstage Club! Check your inbox for your 15% discount pass.'); this.reset(); }" class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto pt-2">
+            <input type="email" 
+                   required
+                   placeholder="Enter your email address..." 
+                   class="w-full px-4 py-3 rounded-2xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
+            <button type="submit" class="btn-neon-primary w-full sm:w-auto px-6 py-3 text-xs sm:text-sm whitespace-nowrap shadow-[0_0_20px_rgba(255,0,127,0.4)]">
+              <span>Join Club</span>
+              <i class="bi bi-stars"></i>
+            </button>
+          </form>
+
+          <p class="text-[11px] text-slate-500">Zero spam. Unsubscribe anytime with a single click.</p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- FULL ARTICLE READER MODAL                                      -->
+  <!-- ============================================================== -->
+  <div id="blogReaderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden">
+    <!-- Modal Backdrop -->
+    <div id="blogModalBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity"></div>
+
+    <!-- Modal Content Card -->
+    <div class="relative w-full max-w-4xl max-h-[92vh] bg-[#120e24] border border-purple-700/50 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-10 animate-fadeIn">
+      
+      <!-- Top Scroll Progress Bar -->
+      <div class="w-full h-1.5 bg-purple-950">
+        <div id="blogModalProgressBar" class="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 transition-all duration-150" style="width: 0%;"></div>
+      </div>
+
+      <!-- Modal Header Bar -->
+      <div class="px-6 py-4 border-b border-purple-800/40 flex items-center justify-between gap-4 bg-[#140e29]/90 backdrop-blur-md flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <span id="modalCategoryBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-md bg-pink-500/20 text-pink-300 border-pink-500/30">
+            Category
+          </span>
+          <span class="text-xs text-slate-400 flex items-center gap-1">
+            <i class="bi bi-clock text-cyan-400"></i> <span id="modalReadTime">5 min read</span>
+          </span>
+          <span class="text-xs text-slate-400 hidden sm:inline flex items-center gap-1">
+            • <span id="modalDate">Oct 8, 2026</span>
+          </span>
+        </div>
+
+        <button id="blogModalCloseBtn" 
+                type="button" 
+                class="w-9 h-9 rounded-full bg-purple-900/40 hover:bg-pink-600/40 text-slate-300 hover:text-white flex items-center justify-center transition"
+                aria-label="Close reader">
+          <i class="bi bi-x-lg text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Article Reader Body -->
+      <div id="blogModalScrollArea" class="flex-grow overflow-y-auto px-6 sm:px-10 py-8 space-y-8 scrollbar-thin">
+        
+        <!-- Article Header -->
+        <div class="space-y-4">
+          <h1 id="modalTitle" class="font-display font-black text-2xl sm:text-4xl text-white leading-tight">
+            Article Title Goes Here
+          </h1>
+
+          <!-- Author Info Row -->
+          <div class="flex items-center justify-between pt-2 border-t border-purple-800/30 gap-4">
+            <div class="flex items-center gap-3">
+              <img id="modalAuthorAvatar" src="" alt="Author" class="w-11 h-11 rounded-full object-cover ring-2 ring-pink-500">
+              <div>
+                <h4 id="modalAuthorName" class="font-bold text-white text-sm">Author Name</h4>
+                <p id="modalAuthorRole" class="text-xs text-pink-400">VIP Event Director</p>
+              </div>
+            </div>
+
+            <!-- Share Buttons Group -->
+            <div class="flex items-center gap-2">
+              <button id="modalCopyLinkBtn" type="button" class="w-8 h-8 rounded-full bg-purple-900/40 hover:bg-pink-600/30 text-slate-300 hover:text-pink-300 flex items-center justify-center transition text-xs" title="Copy Article Link">
+                <i class="bi bi-link-45deg text-base"></i>
+              </button>
+              <button id="modalShareTwitter" type="button" class="w-8 h-8 rounded-full bg-purple-900/40 hover:bg-cyan-600/30 text-slate-300 hover:text-cyan-300 flex items-center justify-center transition text-xs" title="Share on X">
+                <i class="bi bi-twitter-x"></i>
+              </button>
+              <button id="modalShareWhatsApp" type="button" class="w-8 h-8 rounded-full bg-purple-900/40 hover:bg-emerald-600/30 text-slate-300 hover:text-emerald-300 flex items-center justify-center transition text-xs" title="Share on WhatsApp">
+                <i class="bi bi-whatsapp"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Article Hero Image -->
+        <div class="rounded-2xl overflow-hidden aspect-[16/9] shadow-xl border border-purple-800/40">
+          <img id="modalCoverImage" src="" alt="" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Formatted Article Content Body -->
+        <div id="modalContentBody" class="prose prose-invert max-w-none text-slate-200 text-sm sm:text-base leading-relaxed space-y-4">
+          <!-- Injected via blog.js -->
+        </div>
+
+        <!-- Article Tags -->
+        <div class="pt-6 border-t border-purple-800/40">
+          <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Topic Tags</h5>
+          <div id="modalTagsContainer" class="flex flex-wrap gap-2">
+            <!-- Injected via blog.js -->
+          </div>
+        </div>
+
+        <!-- Interactive Booking CTA Inside Article -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-pink-950/40 via-purple-900/40 to-cyan-950/40 border border-pink-500/40 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[0_0_30px_rgba(255,0,127,0.15)]">
+          <div class="space-y-1 text-center sm:text-left">
+            <h4 class="font-display font-black text-lg text-white">Ready to Put These Tips Into Practice?</h4>
+            <p class="text-xs text-slate-300">Book your soundproof private suite equipped with studio mics and custom sound presets.</p>
+          </div>
+          <a href="dashboard.html#book" class="btn-neon-primary px-6 py-3 text-xs sm:text-sm whitespace-nowrap shadow-[0_0_20px_rgba(255,0,127,0.4)]">
+            <i class="bi bi-calendar-check"></i>
+            <span>Reserve A Room Now</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer Mount Point -->
+  <footer id="footer-mount"></footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/data/images.js"></script>
+  <script src="assets/js/data/blog-data.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/blog.js"></script>
+
+</body>
+</html>
