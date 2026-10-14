@@ -23,19 +23,24 @@ class VoxDashboard {
 
     this.render();
     this.bindGlobalEvents();
+    this.updateNotificationBadges();
 
     // Listen for notification changes
-    window.addEventListener('vox_notification_added', () => {
+    const onNotifChange = () => {
+      this.updateNotificationBadges();
       if (this.currentSection === 'notifications' || this.currentSection === 'overview') {
         this.renderSectionContent();
       }
-    });
+    };
+    window.addEventListener('vox_notification_added', onNotifChange);
+    window.addEventListener('vox_notifications_updated', onNotifChange);
   }
 
   setSection(section) {
     this.currentSection = section;
     window.location.hash = section;
     this.updateSidebarActiveState();
+    this.updateNotificationBadges();
     this.renderSectionContent();
 
     // Close mobile sidebar if open
@@ -63,7 +68,35 @@ class VoxDashboard {
 
   render() {
     this.updateSidebarActiveState();
+    this.updateNotificationBadges();
     this.renderSectionContent();
+  }
+
+  updateNotificationBadges() {
+    const notifs = (window.StorageManager && window.StorageManager.getNotifications) ? window.StorageManager.getNotifications() : [];
+    const unreadCount = notifs.filter(n => !n.read).length;
+
+    // Topbar Bell Dot (red/pink blinking animation)
+    const topbarDot = document.getElementById('dashTopbarNotifDot');
+    if (topbarDot) {
+      if (unreadCount > 0) {
+        topbarDot.classList.remove('hidden');
+      } else {
+        topbarDot.classList.add('hidden');
+      }
+    }
+
+    // Sidebar Notification Badge Count
+    const sidebarBadge = document.getElementById('dashNotifBadge');
+    if (sidebarBadge) {
+      if (unreadCount > 0) {
+        sidebarBadge.textContent = unreadCount;
+        sidebarBadge.classList.remove('hidden');
+      } else {
+        sidebarBadge.textContent = '0';
+        sidebarBadge.classList.add('hidden');
+      }
+    }
   }
 
   renderSectionContent() {
@@ -1548,12 +1581,14 @@ class VoxDashboard {
 
   markRead(id) {
     window.StorageManager.markNotificationRead(id);
+    this.updateNotificationBadges();
     this.renderSectionContent();
   }
 
   clearAllNotifications() {
     window.StorageManager.clearNotifications();
     if (window.Toast) window.Toast.info('Notifications cleared.');
+    this.updateNotificationBadges();
     this.renderSectionContent();
   }
 

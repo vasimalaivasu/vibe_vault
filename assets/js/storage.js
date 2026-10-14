@@ -525,9 +525,10 @@ const StorageManager = {
     notifs.unshift(newNotif);
     this.set(STORAGE_KEYS.NOTIFICATIONS, notifs);
 
-    // Dispatch custom event for navbar badge update
+    // Dispatch custom event for badge update
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('vox_notification_added', { detail: newNotif }));
+      window.dispatchEvent(new CustomEvent('vox_notifications_updated', { detail: { action: 'added', notification: newNotif } }));
     }
   },
 
@@ -537,11 +538,17 @@ const StorageManager = {
     if (item) {
       item.read = true;
       this.set(STORAGE_KEYS.NOTIFICATIONS, notifs);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('vox_notifications_updated', { detail: { action: 'read', id } }));
+      }
     }
   },
 
   clearNotifications() {
     this.set(STORAGE_KEYS.NOTIFICATIONS, []);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('vox_notifications_updated', { detail: { action: 'cleared' } }));
+    }
   },
 
   // -------------------------------------------------------------

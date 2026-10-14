@@ -124,7 +124,7 @@
                 class="dash-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-left transition">
           <i class="bi bi-bell text-base text-purple-400"></i>
           <span>Notifications</span>
-          <span id="dashNotifBadge" class="ml-auto text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full font-bold">3</span>
+          <span id="dashNotifBadge" class="ml-auto text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full font-bold hidden">0</span>
         </button>
 
         <button onclick="window.dashboard.setSection('profile')" data-section="profile"
@@ -212,7 +212,10 @@
                 title="Notifications" aria-label="View Notifications"
                 class="w-9 h-9 rounded-full bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-pink-400 flex items-center justify-center transition relative">
           <i class="bi bi-bell-fill text-xs"></i>
-          <span class="absolute 1.5 top-1.5 right-1.5 w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+          <span id="dashTopbarNotifDot" class="absolute top-1.5 right-1.5 flex h-2 w-2 hidden">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-500 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
+          </span>
         </button>
 
       </div>
@@ -286,6 +289,9 @@
 
       // Initialize Dashboard
       window.dashboard = new VoxDashboard();
+      if (window.dashboard && window.dashboard.updateNotificationBadges) {
+        window.dashboard.updateNotificationBadges();
+      }
     });
   </script>
 

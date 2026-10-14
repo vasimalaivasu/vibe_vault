@@ -99,23 +99,25 @@ class VoxBookingStepper {
     this.container.innerHTML = `
       <!-- Stepper Progress Header -->
       <div class="mb-8">
-        <div class="flex items-center justify-between relative max-w-3xl mx-auto px-4">
-          <!-- Connector line -->
-          <div class="stepper-track absolute left-10 right-10 top-1/2 -translate-y-1/2 h-1 bg-purple-950 -z-0">
-            <div class="h-full bg-gradient-to-r from-pink-500 to-cyan-400 transition-all duration-500"
+        <div class="relative max-w-3xl mx-auto px-4">
+          <!-- Connector line: vertically centered directly through bullet centers (40px/2 = 20px on mobile, 48px/2 = 24px on desktop) -->
+          <div class="stepper-track absolute left-8 right-8 sm:left-10 sm:right-10 top-5 sm:top-6 -translate-y-1/2 h-1 bg-purple-950/40 rounded-full overflow-hidden pointer-events-none z-0">
+            <div class="stepper-progress-fill h-full bg-gradient-to-r from-pink-500 to-cyan-400 transition-all duration-500 rounded-full"
                  style="width: ${((this.currentStep - 1) / (this.totalSteps - 1)) * 100}%"></div>
           </div>
 
-          <!-- Step 1 -->
-          ${this.renderStepBullet(1, 'Room', 'bi-door-open')}
-          <!-- Step 2 -->
-          ${this.renderStepBullet(2, 'Date & Slots', 'bi-calendar3')}
-          <!-- Step 3 -->
-          ${this.renderStepBullet(3, 'Party Details', 'bi-people')}
-          <!-- Step 4 -->
-          ${this.renderStepBullet(4, 'Add-ons', 'bi-basket2')}
-          <!-- Step 5 -->
-          ${this.renderStepBullet(5, 'Review & Pay', 'bi-check2-circle')}
+          <div class="flex items-start justify-between relative z-10">
+            <!-- Step 1 -->
+            ${this.renderStepBullet(1, 'Room', 'bi-door-open')}
+            <!-- Step 2 -->
+            ${this.renderStepBullet(2, 'Date & Slots', 'bi-calendar3')}
+            <!-- Step 3 -->
+            ${this.renderStepBullet(3, 'Party Details', 'bi-people')}
+            <!-- Step 4 -->
+            ${this.renderStepBullet(4, 'Add-ons', 'bi-basket2')}
+            <!-- Step 5 -->
+            ${this.renderStepBullet(5, 'Review & Pay', 'bi-check2-circle')}
+          </div>
         </div>
       </div>
 
@@ -176,7 +178,7 @@ class VoxBookingStepper {
 
     return `
       <div class="flex flex-col items-center gap-2 relative z-10 cursor-pointer group" onclick="window.voxBooking.goToStep(${stepNum})">
-        <div class="stepper-bullet ${bulletStateClass} w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold text-sm sm:text-base">
+        <div class="stepper-bullet ${bulletStateClass} w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold text-sm sm:text-base relative z-10 select-none">
           ${iconHtml}
         </div>
         <span class="stepper-label ${labelStateClass} text-[11px] sm:text-xs font-semibold text-center whitespace-nowrap transition-colors">
@@ -215,7 +217,7 @@ class VoxBookingStepper {
         ${selected ? `
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-purple-950/60 border border-pink-500/50 shadow-[0_0_20px_rgba(255,0,127,0.2)] text-xs">
             <div class="flex items-center gap-2.5 text-white">
-              <span class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(255,0,127,0.8)]"></span>
               <span>Currently Selected: <strong class="text-pink-300 font-bold">${selected.name}</strong> (${selected.capacityText} • $${selected.pricePerHour}/hr)</span>
             </div>
             <div class="flex items-center gap-2">
@@ -960,7 +962,7 @@ class VoxBookingStepper {
 
     modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl';
     modal.innerHTML = `
-      <div class="glass-panel max-w-lg w-full p-6 sm:p-8 rounded-3xl border border-pink-500/50 shadow-[0_0_50px_rgba(255,0,127,0.4)] text-center space-y-5 animate-pulse-glow">
+      <div class="glass-panel max-w-lg w-full p-6 sm:p-8 rounded-3xl border border-pink-500/50 shadow-[0_0_50px_rgba(255,0,127,0.4)] text-center space-y-5">
         
         <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600 to-cyan-400 mx-auto flex items-center justify-center shadow-lg">
           <i class="bi bi-check-lg text-3xl text-white"></i>

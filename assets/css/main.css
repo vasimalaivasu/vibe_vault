@@ -497,7 +497,7 @@ h1, h2, h3, h4, h5, h6, .font-display {
   background: #FF007F;
   color: #FFFFFF;
   box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
-  animation: neonPulse 2s infinite;
+  animation: none;
 }
 
 .status-step-bullet.upcoming {
@@ -506,56 +506,85 @@ h1, h2, h3, h4, h5, h6, .font-display {
 }
 
 /* 5-Step Booking Wizard Stepper Bullets Base */
+.stepper-track {
+  background-color: rgba(46, 16, 101, 0.5);
+}
+
 .stepper-bullet {
+  position: relative;
+  z-index: 2;
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
   border-width: 2px;
   border-style: solid;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stepper-bullet *,
+.stepper-bullet i,
+.stepper-bullet svg {
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-upcoming {
-  background-color: #160F30;
-  border-color: rgba(168, 85, 247, 0.45);
-  color: #C4B5FD;
+  background-color: #160F30 !important;
+  border-color: rgba(168, 85, 247, 0.45) !important;
+  color: #C4B5FD !important;
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 .stepper-bullet.stepper-bullet-upcoming i,
 .stepper-bullet.stepper-bullet-upcoming svg {
   color: #C4B5FD !important;
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-upcoming:hover {
-  border-color: #FF007F;
-  color: #FF007F;
+  border-color: #FF007F !important;
+  color: #FF007F !important;
 }
 
 .stepper-bullet.stepper-bullet-upcoming:hover i,
 .stepper-bullet.stepper-bullet-upcoming:hover svg {
   color: #FF007F !important;
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-current {
-  background: linear-gradient(135deg, #FF007F, #E11D48);
-  border-color: #FF66B2;
+  background: linear-gradient(135deg, #FF007F, #E11D48) !important;
+  border-color: #FF66B2 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 0 22px rgba(255, 0, 127, 0.6);
-  animation: neonPulse 2s infinite;
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.55) !important;
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-current *,
-.stepper-bullet.stepper-bullet-current i {
+.stepper-bullet.stepper-bullet-current i,
+.stepper-bullet.stepper-bullet-current svg {
   color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-completed {
-  background: linear-gradient(135deg, #00D8F6, #0284C7);
-  border-color: #38BDF8;
-  color: #020617 !important;
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+  background: linear-gradient(135deg, #00D8F6, #0284C7) !important;
+  border-color: #38BDF8 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45) !important;
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
 .stepper-bullet.stepper-bullet-completed *,
-.stepper-bullet.stepper-bullet-completed i {
-  color: #020617 !important;
+.stepper-bullet.stepper-bullet-completed i,
+.stepper-bullet.stepper-bullet-completed svg {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 .stepper-label.stepper-label-current {
@@ -1294,12 +1323,31 @@ html.light .stepper-track {
   background-color: #E2DCF3 !important;
 }
 
+[data-theme="light"] .stepper-bullet,
+html.light .stepper-bullet {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+[data-theme="light"] .stepper-bullet *,
+[data-theme="light"] .stepper-bullet i,
+[data-theme="light"] .stepper-bullet svg,
+html.light .stepper-bullet *,
+html.light .stepper-bullet i,
+html.light .stepper-bullet svg {
+  opacity: 1 !important;
+}
+
 [data-theme="light"] .stepper-bullet.stepper-bullet-upcoming,
 html.light .stepper-bullet.stepper-bullet-upcoming {
   background-color: #FFFFFF !important;
   border: 2px solid rgba(139, 92, 246, 0.28) !important;
   color: #4C4569 !important;
   box-shadow: 0 2px 10px rgba(80, 50, 140, 0.08) !important;
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-upcoming:hover,
@@ -1314,6 +1362,7 @@ html.light .stepper-bullet.stepper-bullet-upcoming:hover {
 html.light .stepper-bullet.stepper-bullet-upcoming i,
 html.light .stepper-bullet.stepper-bullet-upcoming svg {
   color: #4C4569 !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-upcoming:hover i,
@@ -1321,6 +1370,7 @@ html.light .stepper-bullet.stepper-bullet-upcoming svg {
 html.light .stepper-bullet.stepper-bullet-upcoming:hover i,
 html.light .stepper-bullet.stepper-bullet-upcoming:hover svg {
   color: #FF007F !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-current,
@@ -1329,13 +1379,19 @@ html.light .stepper-bullet.stepper-bullet-current {
   border-color: #FF007F !important;
   color: #FFFFFF !important;
   box-shadow: 0 4px 20px rgba(255, 0, 127, 0.45) !important;
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-current *,
 [data-theme="light"] .stepper-bullet.stepper-bullet-current i,
+[data-theme="light"] .stepper-bullet.stepper-bullet-current svg,
 html.light .stepper-bullet.stepper-bullet-current *,
-html.light .stepper-bullet.stepper-bullet-current i {
+html.light .stepper-bullet.stepper-bullet-current i,
+html.light .stepper-bullet.stepper-bullet-current svg {
   color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-completed,
@@ -1344,13 +1400,19 @@ html.light .stepper-bullet.stepper-bullet-completed {
   border-color: #0284C7 !important;
   color: #FFFFFF !important;
   box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3) !important;
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-bullet.stepper-bullet-completed *,
 [data-theme="light"] .stepper-bullet.stepper-bullet-completed i,
+[data-theme="light"] .stepper-bullet.stepper-bullet-completed svg,
 html.light .stepper-bullet.stepper-bullet-completed *,
-html.light .stepper-bullet.stepper-bullet-completed i {
+html.light .stepper-bullet.stepper-bullet-completed i,
+html.light .stepper-bullet.stepper-bullet-completed svg {
   color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 [data-theme="light"] .stepper-label.stepper-label-current,
