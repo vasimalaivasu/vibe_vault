@@ -3390,6 +3390,40 @@ html.light .audio-specs-ribbon .audio-spec-icon-purple {
   border: 1px solid rgba(124, 58, 237, 0.3) !important;
 }
 
+/* ==========================================================================
+   Contact Venue Map & Loading Overlays (Prevents Black Screens)
+   ========================================================================== */
+#contactRealMapIframe {
+  background-color: transparent;
+}
+
+[data-theme="light"] #mapLoadingOverlay,
+html.light #mapLoadingOverlay {
+  background-color: #F8F5FF !important;
+}
+
+[data-theme="light"] #mapLoadingStatus,
+html.light #mapLoadingStatus {
+  color: #1E1B4B !important;
+}
+
+[data-theme="light"] #mapFallbackCard,
+html.light #mapFallbackCard {
+  background: linear-gradient(135deg, #FFFFFF, #F8F5FF) !important;
+  border: 1px solid rgba(139, 92, 246, 0.28) !important;
+}
+
+[data-theme="light"] #fallbackVenueTitle,
+html.light #fallbackVenueTitle {
+  color: #1E1B4B !important;
+}
+
+[data-theme="light"] #fallbackVenueAddress,
+html.light #fallbackVenueAddress {
+  color: #4C4569 !important;
+}
+
+
 
 
 
