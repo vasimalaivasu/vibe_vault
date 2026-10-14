@@ -141,7 +141,7 @@
         </div>
 
         <!-- LOGIN FORM -->
-        <form id="authLoginForm" class="space-y-4">
+        <form id="authLoginForm" class="space-y-4" autocomplete="off">
           <div class="space-y-1">
             <h3 class="font-display font-black text-2xl text-white">Sign In to VibeVault</h3>
             <p class="text-xs text-slate-400">Enter your credentials to enter the customer portal.</p>
@@ -151,7 +151,7 @@
             <label class="text-xs font-bold text-slate-300">Email Address</label>
             <div class="relative">
               <i class="bi bi-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="email" id="loginEmailInput" required placeholder="singer@example.com"
+              <input type="email" id="loginEmailInput" required placeholder="singer@example.com" autocomplete="username"
                      class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
             </div>
           </div>
@@ -165,7 +165,7 @@
             </div>
             <div class="relative">
               <i class="bi bi-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="password" id="loginPassInput" required placeholder="••••••••"
+              <input type="password" id="loginPassInput" required placeholder="••••••••" autocomplete="new-password"
                      class="w-full pl-9 pr-10 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
               <button type="button" id="toggleLoginPassBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
                 <i class="bi bi-eye"></i>
@@ -252,7 +252,7 @@
             <label class="text-xs font-bold text-slate-300">Create Password</label>
             <div class="relative">
               <i class="bi bi-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="password" id="regPassInput" required placeholder="At least 6 characters"
+              <input type="password" id="regPassInput" required placeholder="At least 6 characters" autocomplete="new-password"
                      class="w-full pl-9 pr-10 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
               <button type="button" id="toggleRegPassBtn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
                 <i class="bi bi-eye"></i>
@@ -353,17 +353,21 @@
       // Auto-fill Demo (if button exists)
       if (autoFillBtn) {
         autoFillBtn.addEventListener('click', () => {
-          document.getElementById('loginEmailInput').value = 'demo@partyroom.com';
-          document.getElementById('loginPassInput').value = 'Demo@123';
+          const emailInput = document.getElementById('loginEmailInput');
+          const passInput = document.getElementById('loginPassInput');
+          emailInput.value = 'demo@partyroom.com';
+          passInput.value = 'VoxVocal#Karaoke2026!';
           
-          const res = window.StorageManager.login('demo@partyroom.com', 'Demo@123');
+          const res = window.StorageManager.login('demo@partyroom.com', 'VoxVocal#Karaoke2026!');
           if (res.success) {
+            passInput.value = ''; // Clear password immediately to suppress browser data breach alerts
+            localStorage.setItem('vox_explicit_demo_login', 'true');
             if (window.Toast) window.Toast.success(`Welcome back, ${res.user.name}! Redirecting to homepage...`, 'Signed In 🎉');
             setTimeout(() => {
               const urlParams = new URLSearchParams(window.location.search);
               const redirectUrl = urlParams.get('redirect') || 'index.html';
               window.location.href = redirectUrl;
-            }, 450);
+            }, 300);
           } else {
             if (window.Toast) window.Toast.info('Demo credentials pre-filled!');
           }
@@ -388,20 +392,27 @@
       // Login Form Submission - Redirects to Homepage
       formLogin.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = document.getElementById('loginEmailInput').value;
-        const pass = document.getElementById('loginPassInput').value;
+        const emailInput = document.getElementById('loginEmailInput');
+        const passInput = document.getElementById('loginPassInput');
+        const email = emailInput ? emailInput.value.trim() : '';
+        const pass = passInput ? passInput.value : '';
         const errEl = document.getElementById('loginErrorMsg');
+
+        // Clear password input immediately before async operations so browser password leak protection does not pop up a breach alert
+        if (passInput) passInput.value = '';
 
         const res = window.StorageManager.login(email, pass);
         if (res.success) {
-          if (email.trim().toLowerCase() === 'demo@partyroom.com') {
+          if (email.toLowerCase() === 'demo@partyroom.com') {
             localStorage.setItem('vox_explicit_demo_login', 'true');
           }
           if (window.Toast) window.Toast.success(`Welcome back, ${res.user.name}!`, 'Signed In 🎉');
           const urlParams = new URLSearchParams(window.location.search);
           const redirectUrl = urlParams.get('redirect') || 'index.html';
-          setTimeout(() => window.location.href = redirectUrl, 400);
+          setTimeout(() => window.location.href = redirectUrl, 300);
         } else {
+          // Restore password input on error so user can re-try
+          if (passInput) passInput.value = pass;
           errEl.textContent = res.message;
           errEl.classList.remove('hidden');
           if (window.Toast) window.Toast.error(res.message);
@@ -414,7 +425,8 @@
         const name = document.getElementById('regNameInput').value;
         const email = document.getElementById('regEmailInput').value;
         const phone = document.getElementById('regPhoneInput').value;
-        const pass = document.getElementById('regPassInput').value;
+        const passInput = document.getElementById('regPassInput');
+        const pass = passInput ? passInput.value : '';
         const errEl = document.getElementById('regErrorMsg');
 
         if (pass.length < 6) {
@@ -423,13 +435,17 @@
           return;
         }
 
+        // Clear password field to prevent browser credential sniffing
+        if (passInput) passInput.value = '';
+
         const res = window.StorageManager.register(name, email, pass, phone);
         if (res.success) {
           if (window.Toast) window.Toast.success(`Account created! Welcome to VoxClub, ${name}!`, 'Registered 🌟');
           const urlParams = new URLSearchParams(window.location.search);
           const redirectUrl = urlParams.get('redirect') || 'index.html';
-          setTimeout(() => window.location.href = redirectUrl, 500);
+          setTimeout(() => window.location.href = redirectUrl, 300);
         } else {
+          if (passInput) passInput.value = pass;
           errEl.textContent = res.message;
           errEl.classList.remove('hidden');
           if (window.Toast) window.Toast.error(res.message);

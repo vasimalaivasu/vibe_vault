@@ -234,6 +234,16 @@ const VOX_ADDONS = [
     icon: 'bi-lightning-fill',
     image: VOX_IMAGES.addons.vipSongQueue,
     description: 'Jump to top of song queue instantly from any phone without interrupting current singer.'
+  },
+  {
+    id: 'addon-midnight-feast',
+    name: 'Midnight Sliders & Loaded Nachos',
+    category: 'Food & Dining',
+    price: 48,
+    unit: 'party combo (serves 6–8)',
+    icon: 'bi-fire',
+    image: VOX_IMAGES.addons.midnightFeast,
+    description: 'Mini Wagyu and crispy chicken sliders, hot skillet nachos with melted queso, guacamole & jalapenos.'
   }
 ];
 

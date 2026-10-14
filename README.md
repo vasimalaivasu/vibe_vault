@@ -24,7 +24,7 @@ The template comes pre-seeded with sample reservations, loyalty points, and a de
 |---|---|
 | **Demo User** | Alex Vance (Gold VIP Member) |
 | **Email** | `demo@partyroom.com` |
-| **Password** | `Demo@123` |
+| **Password** | `VoxVocal#Karaoke2026!` *(Legacy `Demo@123` also accepted)* |
 | **One-Click Auto-Fill** | Available directly on [`login.html`](file:///c:/Users/Vasimalai/Desktop/Karoke%20&%20Room/login.html) |
 
 ---

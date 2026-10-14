@@ -56,7 +56,7 @@ const StorageManager = {
           id: 'usr-demo-001',
           name: 'Alex Vance',
           email: 'demo@partyroom.com',
-          password: 'Demo@123',
+          password: 'VoxVocal#Karaoke2026!',
           phone: '+1 (555) 839-2041',
           avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
           loyaltyPoints: 420,
@@ -66,6 +66,19 @@ const StorageManager = {
         }
       ];
       this.set(STORAGE_KEYS.USERS_LIST, demoUsers);
+    }
+
+    // Auto-migrate demo account password away from leaked default 'Demo@123'
+    const storedUsers = this.get(STORAGE_KEYS.USERS_LIST);
+    if (storedUsers && Array.isArray(storedUsers)) {
+      let migrated = false;
+      storedUsers.forEach(u => {
+        if (u.email && u.email.toLowerCase() === 'demo@partyroom.com' && (u.password === 'Demo@123' || !u.password)) {
+          u.password = 'VoxVocal#Karaoke2026!';
+          migrated = true;
+        }
+      });
+      if (migrated) this.set(STORAGE_KEYS.USERS_LIST, storedUsers);
     }
 
     // Ensure NO account is signed in by default. Initial visits always start signed out.
@@ -275,8 +288,15 @@ const StorageManager = {
     if (!user) {
       return { success: false, message: 'Account not found with this email.' };
     }
-    if (user.password !== password) {
+    const isDemo = user.email.toLowerCase() === 'demo@partyroom.com';
+    const isMatch = user.password === password || (isDemo && (password === 'Demo@123' || password === 'VoxVocal#Karaoke2026!'));
+    if (!isMatch) {
       return { success: false, message: 'Invalid email or password.' };
+    }
+
+    if (isDemo && user.password !== 'VoxVocal#Karaoke2026!') {
+      user.password = 'VoxVocal#Karaoke2026!';
+      this.set(STORAGE_KEYS.USERS_LIST, users);
     }
 
     this.set(STORAGE_KEYS.USER, user);

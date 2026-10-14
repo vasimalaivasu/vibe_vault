@@ -66,8 +66,9 @@ class VoxBookingStepper {
     if (preRoomId && window.VOX_ROOMS) {
       const found = window.VOX_ROOMS.find(r => r.id === preRoomId);
       if (found) this.state.selectedRoom = found;
-    } else if (window.VOX_ROOMS && window.VOX_ROOMS.length > 0) {
-      this.state.selectedRoom = window.VOX_ROOMS[0]; // default first room
+    } else {
+      // Start fresh with nothing selected by default
+      this.state.selectedRoom = null;
     }
 
     if (prePackageId && window.VOX_PACKAGES) {
@@ -89,8 +90,31 @@ class VoxBookingStepper {
       if (!isNaN(g)) this.state.guestsCount = g;
     }
 
-    // Default select 2 slots if available
-    this.state.selectedSlots = ['20:00', '21:00'];
+    // Start fresh: no time slots pre-selected
+    this.state.selectedSlots = [];
+
+    this.render();
+  }
+
+  resetState() {
+    this.currentStep = 1;
+    this.state = {
+      selectedRoom: null,
+      selectedDate: null,
+      selectedSlots: [],
+      guestsCount: 4,
+      occasion: 'Friends Hangout',
+      specialRequests: '',
+      selectedPackage: null,
+      addons: {},
+      promoCode: '',
+      discountPercent: 0,
+      appliedPromo: null
+    };
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.state.selectedDate = tomorrow.toISOString().split('T')[0];
 
     this.render();
   }
@@ -559,6 +583,90 @@ class VoxBookingStepper {
             `;
           }).join('')}
         </div>
+
+        <!-- In-Suite Kitchen, Bar & Dietary Concierge Container -->
+        <div class="glass-panel p-6 sm:p-7 rounded-3xl border border-pink-500/30 bg-gradient-to-br from-purple-950/60 via-[#100c24] to-pink-950/30 shadow-[0_0_30px_rgba(255,0,127,0.15)] space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-purple-800/40">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center text-white shadow-lg text-xl flex-shrink-0">
+                <i class="bi bi-cup-hot-fill"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-pink-500/20 text-pink-300 border border-pink-500/40">
+                    In-Room Dining Concierge
+                  </span>
+                  <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Live Kitchen Open
+                  </span>
+                </div>
+                <h4 class="font-display font-black text-white text-lg sm:text-xl mt-1">
+                  Chef's Kitchen & Craft Bar In-Suite Service
+                </h4>
+              </div>
+            </div>
+            <div class="text-xs text-slate-300 bg-purple-950/60 px-3.5 py-2 rounded-xl border border-purple-800/40 sm:text-right">
+              <span class="text-slate-400 block">Average In-Room Delivery</span>
+              <span class="font-bold text-cyan-300"><i class="bi bi-stopwatch text-pink-400"></i> Under 12 Minutes</span>
+            </div>
+          </div>
+
+          <!-- Feature Highlights Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-pink-500/40 transition">
+              <div class="flex items-center gap-2 text-pink-400 font-bold">
+                <i class="bi bi-tablet-landscape text-base"></i>
+                <span>iPad Touch Ordering</span>
+              </div>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                Order extra cocktails, mocktails, and fresh finger foods directly from your suite's wall-mounted digital tablet at any time.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-cyan-400/40 transition">
+              <div class="flex items-center gap-2 text-cyan-300 font-bold">
+                <i class="bi bi-patch-check-fill text-base"></i>
+                <span>Dietary Accommodations</span>
+              </div>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                Certified Halal, 100% Vegan, Gluten-Free & Nut-Free options freshly prepared in dedicated allergen-separated kitchen stations.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-amber-400/40 transition">
+              <div class="flex items-center gap-2 text-amber-300 font-bold">
+                <i class="bi bi-bell-fill text-base"></i>
+                <span>Private Suite Runner</span>
+              </div>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                Discreet delivery by dedicated runners who replenish ice, refresh glasses, and serve hot platters without interrupting your singing.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-emerald-400/40 transition">
+              <div class="flex items-center gap-2 text-emerald-300 font-bold">
+                <i class="bi bi-shield-lock-fill text-base"></i>
+                <span>Pre-Pay or Tab on Arrival</span>
+              </div>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                Pay for add-ons now with your 20% booking deposit, or keep an open digital tab that settles at reception upon room checkout.
+              </p>
+            </div>
+          </div>
+
+          <!-- Dietary & Kitchen Notes Quick Selector -->
+          <div class="p-4 rounded-2xl bg-[#0b0817] border border-purple-800/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2 text-slate-300">
+              <i class="bi bi-info-circle text-pink-400 text-sm"></i>
+              <span>Have specific food allergies or bottle service requests? You can add them in <strong>Step 3 (Special Requests)</strong> or tell our chef at reception!</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">🌿 Vegan Friendly</span>
+              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">✨ Halal Certified</span>
+              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">🌾 Gluten-Free</span>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -947,7 +1055,10 @@ class VoxBookingStepper {
     const newBooking = window.StorageManager.createReservation(bookingPayload);
     window.StorageManager.clearDraftBooking();
 
-    // Show Confirmation Modal
+    // Reset wizard state completely so book-a-room starts fresh with nothing pre-selected
+    this.resetState();
+
+    // Show Confirmation Alert & Modal
     this.showConfirmationModal(newBooking);
   }
 
@@ -960,53 +1071,96 @@ class VoxBookingStepper {
       document.body.appendChild(modal);
     }
 
-    modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl';
+    // Clear any previous redirect interval
+    if (this._redirectInterval) {
+      clearInterval(this._redirectInterval);
+      this._redirectInterval = null;
+    }
+
+    modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fade-in';
     modal.innerHTML = `
-      <div class="glass-panel max-w-lg w-full p-6 sm:p-8 rounded-3xl border border-pink-500/50 shadow-[0_0_50px_rgba(255,0,127,0.4)] text-center space-y-5">
+      <div class="glass-panel max-w-lg w-full p-6 sm:p-8 rounded-3xl border-2 border-pink-500/60 shadow-[0_0_60px_rgba(255,0,127,0.45)] text-center space-y-5 animate-scale-up">
         
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600 to-cyan-400 mx-auto flex items-center justify-center shadow-lg">
-          <i class="bi bi-check-lg text-3xl text-white"></i>
+        <!-- Animated celebration icon -->
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600 via-rose-500 to-amber-400 mx-auto flex items-center justify-center shadow-[0_0_30px_rgba(255,0,127,0.6)]">
+          <i class="bi bi-check-lg text-4xl text-white font-black"></i>
         </div>
 
         <div>
-          <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Stage Confirmed!</span>
-          <h3 class="font-display font-black text-2xl text-white mt-1">Get Ready to Sing!</h3>
-          <p class="text-xs text-slate-300 mt-1">Booking Reference: <span class="text-pink-400 font-mono font-bold">${booking.id}</span></p>
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-black text-cyan-300 uppercase tracking-widest bg-cyan-950/60 border border-cyan-400/40 mb-2">
+            Stage Confirmed & Locked!
+          </span>
+          <h3 class="font-display font-black text-2xl sm:text-3xl text-white">Booking Successful! 🎉</h3>
+          <p class="text-xs text-slate-300 mt-1.5">Booking Reference: <span class="text-pink-400 font-mono font-bold text-sm">${booking.id}</span></p>
         </div>
 
-        <div class="p-4 rounded-2xl bg-purple-950/60 border border-purple-800/40 text-left text-xs space-y-2">
-          <div class="flex justify-between"><span class="text-slate-400">Venue:</span> <span class="font-bold text-white">${booking.roomName}</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Date:</span> <span class="font-bold text-white">${booking.date}</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Slot:</span> <span class="font-bold text-pink-400">${booking.timeText}</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Guests:</span> <span class="font-bold text-white">${booking.guests} Guests</span></div>
-          <div class="flex justify-between"><span class="text-slate-400">Deposit Paid:</span> <span class="font-bold text-emerald-400">$${booking.depositPaid.toFixed(2)}</span></div>
+        <!-- Summary Details Box -->
+        <div class="p-4 rounded-2xl bg-purple-950/70 border border-purple-800/50 text-left text-xs space-y-2.5">
+          <div class="flex justify-between items-center"><span class="text-slate-400">Venue / Room:</span> <span class="font-bold text-white text-sm">${booking.roomName}</span></div>
+          <div class="flex justify-between items-center"><span class="text-slate-400">Date:</span> <span class="font-bold text-white">${booking.date}</span></div>
+          <div class="flex justify-between items-center"><span class="text-slate-400">Time Slot:</span> <span class="font-bold text-pink-400">${booking.timeText}</span></div>
+          <div class="flex justify-between items-center"><span class="text-slate-400">Guests & Occasion:</span> <span class="font-bold text-white">${booking.guests} Guests (${booking.occasion || 'Party'})</span></div>
+          <div class="flex justify-between items-center pt-2 border-t border-purple-900/40">
+            <span class="text-slate-400">Deposit Locked (20%):</span>
+            <span class="font-extrabold text-emerald-400 text-sm">$${booking.depositPaid.toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-400">
+            <span>Balance Due on Arrival:</span>
+            <span class="font-semibold text-slate-300">$${booking.balanceDue.toFixed(2)}</span>
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+        <!-- Countdown Notice Alert -->
+        <div class="p-3 rounded-2xl bg-gradient-to-r from-pink-500/15 via-purple-900/30 to-cyan-500/15 border border-cyan-400/40 text-center text-xs text-white flex items-center justify-center gap-2">
+          <i class="bi bi-clock-history text-cyan-300"></i>
+          <span>Returning to Home Page in <span id="homeRedirectCountdown" class="font-black text-cyan-300 text-sm">4</span> seconds...</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-1">
+          <a href="index.html" id="btnReturnHomeNow" class="btn-neon-primary flex-1 py-3.5 text-xs text-center font-bold flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(255,0,127,0.4)]">
+            <i class="bi bi-house-door-fill text-sm"></i> Return to Home Page Now
+          </a>
           <button type="button" onclick="window.voxBooking.downloadICS('${booking.id}')"
-                  class="btn-neon-outline flex-1 py-3 text-xs">
+                  class="btn-neon-outline flex-1 py-3.5 text-xs font-semibold flex items-center justify-center gap-1.5">
             <i class="bi bi-calendar-event"></i> Add to Calendar (.ics)
           </button>
-          ${user ? `
-            <a href="dashboard.html#reservations" class="btn-neon-primary flex-1 py-3 text-xs text-center">
-              <i class="bi bi-speedometer2"></i> View in Dashboard
-            </a>
-          ` : `
-            <a href="index.html" class="btn-neon-primary flex-1 py-3 text-xs text-center">
-              <i class="bi bi-house-door"></i> Back to Home Page 1
-            </a>
-          `}
         </div>
 
-        <button type="button" onclick="document.getElementById('${modalId}').remove()" class="text-xs text-slate-400 hover:text-white">
-          Close Window
-        </button>
+        <div>
+          <button type="button" onclick="window.voxBooking.closeConfirmationAndGoHome()" class="text-xs text-slate-400 hover:text-white transition underline underline-offset-4">
+            Go to Home Page immediately
+          </button>
+        </div>
       </div>
     `;
 
     if (window.Toast) {
-      window.Toast.success(`Reservation ${booking.id} locked in!`, 'Booking Confirmed! 🎤');
+      window.Toast.success('Booking Successful! Returning to home page...', 'Stage Confirmed! 🎉');
     }
+
+    // Auto-redirect countdown to home page
+    let secondsLeft = 4;
+    const countdownEl = document.getElementById('homeRedirectCountdown');
+    this._redirectInterval = setInterval(() => {
+      secondsLeft--;
+      if (countdownEl) countdownEl.textContent = String(secondsLeft);
+      if (secondsLeft <= 0) {
+        clearInterval(this._redirectInterval);
+        this._redirectInterval = null;
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+  }
+
+  closeConfirmationAndGoHome() {
+    if (this._redirectInterval) {
+      clearInterval(this._redirectInterval);
+      this._redirectInterval = null;
+    }
+    const modal = document.getElementById('bookingSuccessModal');
+    if (modal) modal.remove();
+    window.location.href = 'index.html';
   }
 
   downloadICS(bookingId) {
