@@ -137,29 +137,28 @@
 
     </div>
 
-    <!-- Sidebar Bottom: User Card & Sign Out -->
-    <div class="pt-4 border-t border-purple-800/40 space-y-3">
-      
-      <div class="flex items-center gap-3 p-2 rounded-2xl bg-purple-950/40 border border-purple-800/40">
-        <img id="sidebarUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
-             alt="User" class="w-9 h-9 rounded-xl object-cover ring-2 ring-pink-500">
-        <div class="overflow-hidden flex-1">
-          <p id="sidebarUserName" class="font-bold text-white text-xs truncate">Alex Vance</p>
-          <p class="text-[10px] text-pink-400 font-semibold truncate">Gold VIP Vocalist</p>
+      <!-- Sidebar Bottom: User Card & Auth Actions -->
+      <div class="pt-4 border-t border-purple-800/40 space-y-3">
+        
+        <div id="sidebarUserCard" class="flex items-center gap-3 p-2 rounded-2xl bg-purple-950/40 border border-purple-800/40">
+          <img id="sidebarUserAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" 
+               alt="User" class="w-9 h-9 rounded-xl object-cover ring-2 ring-purple-500/50">
+          <div class="overflow-hidden flex-1">
+            <p id="sidebarUserName" class="font-bold text-white text-xs truncate">Guest Singer</p>
+            <p id="sidebarUserTier" class="text-[10px] text-slate-400 font-semibold truncate">Not Signed In</p>
+          </div>
         </div>
-      </div>
 
-      <div class="grid grid-cols-2 gap-2">
-        <a href="index.html" class="p-2 rounded-xl bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white text-[11px] font-bold text-center transition">
-          <i class="bi bi-arrow-left"></i> Home
-        </a>
-        <button id="dashboardLogoutBtn" onclick="if (window.StorageManager) window.StorageManager.logout(); else { localStorage.removeItem('vox_current_user'); localStorage.setItem('vox_user_logged_out','true'); } if (window.Toast) window.Toast.info('Logged out successfully.'); setTimeout(() => window.location.href = 'index.html', 300);"
-                class="p-2 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 hover:text-white text-[11px] font-bold text-center transition cursor-pointer flex items-center justify-center gap-1.5">
-          <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
-        </button>
-      </div>
+        <div id="sidebarAuthActions" class="grid grid-cols-2 gap-2">
+          <a href="index.html" class="p-2 rounded-xl bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white text-[11px] font-bold text-center transition">
+            <i class="bi bi-arrow-left"></i> Home
+          </a>
+          <a href="login.html?redirect=dashboard.html" id="dashboardSignInBtn" class="p-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-[11px] font-bold text-center transition flex items-center justify-center gap-1.5 shadow-md">
+            <i class="bi bi-person-fill"></i> <span>Sign In</span>
+          </a>
+        </div>
 
-    </div>
+      </div>
 
   </aside>
 
@@ -238,18 +237,39 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Sync user info into sidebar
-      let user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
-      if (!user && window.StorageManager) {
-        const demoLogin = window.StorageManager.login('demo@partyroom.com', 'Demo@123');
-        if (demoLogin.success) user = demoLogin.user;
+      // Check current user session (never auto-login demo account)
+      const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+
+      // If unauthenticated and not opening the booking wizard, redirect directly to Home Page 1 (index.html)
+      const isBookingIntent = window.location.hash.includes('book') || window.location.search.includes('roomId') || window.location.search.includes('packageId') || window.location.search.includes('date');
+      if (!user && !isBookingIntent) {
+        window.location.href = 'index.html';
+        return;
       }
 
+      const nameEl = document.getElementById('sidebarUserName');
+      const avatarEl = document.getElementById('sidebarUserAvatar');
+      const tierEl = document.getElementById('sidebarUserTier');
+      const authActionsEl = document.getElementById('sidebarAuthActions');
+
       if (user) {
-        const nameEl = document.getElementById('sidebarUserName');
-        const avatarEl = document.getElementById('sidebarUserAvatar');
         if (nameEl) nameEl.textContent = user.name;
         if (avatarEl && user.avatar) avatarEl.src = user.avatar;
+        if (tierEl) {
+          tierEl.textContent = user.membershipTier || 'Gold VIP Vocalist';
+          tierEl.className = 'text-[10px] text-pink-400 font-semibold truncate';
+        }
+        if (authActionsEl) {
+          authActionsEl.innerHTML = `
+            <a href="index.html" class="p-2 rounded-xl bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white text-[11px] font-bold text-center transition">
+              <i class="bi bi-arrow-left"></i> Home
+            </a>
+            <button id="dashboardLogoutBtn" onclick="if (window.StorageManager) window.StorageManager.logout(); if (window.Toast) window.Toast.info('Logged out successfully.'); setTimeout(() => window.location.href = 'index.html', 300);"
+                    class="p-2 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 hover:text-white text-[11px] font-bold text-center transition cursor-pointer flex items-center justify-center gap-1.5">
+              <i class="bi bi-box-arrow-right"></i> <span>Sign Out</span>
+            </button>
+          `;
+        }
       }
 
       // Initialize theme toggle button icon & RTL label

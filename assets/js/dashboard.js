@@ -111,13 +111,14 @@ class VoxDashboard {
   // 1. OVERVIEW SECTION
   // -------------------------------------------------------------
   renderOverview() {
-    const user = window.StorageManager.getCurrentUser() || { 
-      name: 'Alex Vance', 
-      email: 'demo@partyroom.com', 
-      loyaltyPoints: 420, 
-      totalSpent: 945,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      membershipTier: 'Gold VIP Vocalist'
+    const currentUser = window.StorageManager.getCurrentUser();
+    const user = currentUser || { 
+      name: 'Guest Singer', 
+      email: 'guest@partyroom.com', 
+      loyaltyPoints: 0, 
+      totalSpent: 0,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+      membershipTier: 'Guest Vocalist'
     };
     const reservations = window.StorageManager.getReservations();
     const upcoming = reservations.find(r => r.status === 'Confirmed' || r.status === 'Pending' || r.status === 'In Session');
@@ -167,20 +168,27 @@ class VoxDashboard {
                   </span>
                 </div>
                 <h2 class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-white">
-                  Welcome back to the stage, <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400">${user.name}</span>! 🎤
+                  ${currentUser ? `Welcome back to the stage, <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400">${user.name}</span>! 🎤` : `Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400">VibeVault</span>! 🎤`}
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-300 max-w-xl">
-                  Your private lounge is prepped with calibrated acoustics. Review your live stage pass below or reserve your next singing party.
+                  ${currentUser ? 'Your private lounge is prepped with calibrated acoustics. Review your live stage pass below or reserve your next singing party.' : 'Book private themed karaoke suites, browse the songbook, or sign in to track reservations and earn rewards.'}
                 </p>
               </div>
             </div>
 
             <!-- Quick Action CTA -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-shrink-0">
-              <button onclick="window.dashboard.setSection('book')" class="btn-neon-primary px-6 py-3.5 text-xs font-bold rounded-2xl shadow-[0_0_25px_rgba(255,0,127,0.4)] flex items-center justify-center gap-2">
-                <i class="bi bi-calendar-plus text-sm"></i>
-                <span>Book Next Stage</span>
-              </button>
+              ${!currentUser ? `
+                <a href="login.html?redirect=dashboard.html" class="btn-neon-primary px-6 py-3.5 text-xs font-bold rounded-2xl shadow-[0_0_25px_rgba(255,0,127,0.4)] flex items-center justify-center gap-2">
+                  <i class="bi bi-box-arrow-in-right text-sm"></i>
+                  <span>Sign In</span>
+                </a>
+              ` : `
+                <button onclick="window.dashboard.setSection('book')" class="btn-neon-primary px-6 py-3.5 text-xs font-bold rounded-2xl shadow-[0_0_25px_rgba(255,0,127,0.4)] flex items-center justify-center gap-2">
+                  <i class="bi bi-calendar-plus text-sm"></i>
+                  <span>Book Next Stage</span>
+                </button>
+              `}
               <button onclick="window.dashboard.setSection('reservations')" class="btn-neon-outline px-5 py-3.5 text-xs font-bold rounded-2xl flex items-center justify-center gap-2">
                 <i class="bi bi-ticket-perforated text-sm"></i>
                 <span>All Stage Passes</span>
@@ -1553,14 +1561,34 @@ class VoxDashboard {
   // 7. PROFILE & AVATAR BASE64 UPLOAD
   // -------------------------------------------------------------
   renderProfile() {
-    const user = window.StorageManager.getCurrentUser() || {
-      name: 'Alex Vance',
-      email: 'demo@partyroom.com',
-      phone: '+1 (555) 839-2041',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      membershipTier: 'Gold VIP Vocalist',
-      loyaltyPoints: 420
-    };
+    const user = window.StorageManager.getCurrentUser();
+    if (!user) {
+      return `
+        <div class="space-y-6 max-w-2xl animate-fadeIn">
+          <div>
+            <h2 class="font-display font-black text-3xl text-white">Account Profile</h2>
+            <p class="text-sm text-slate-400">Manage your profile, avatar, and vocalist preferences.</p>
+          </div>
+          <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-purple-800/40 text-center space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-3xl mx-auto shadow-lg">
+              <i class="bi bi-person-lock"></i>
+            </div>
+            <div class="space-y-1">
+              <h3 class="font-bold text-white text-xl">Sign In Required</h3>
+              <p class="text-xs text-slate-400 max-w-md mx-auto">You are currently browsing as a guest with no account signed in. Please sign in to view and update your profile details.</p>
+            </div>
+            <div class="pt-2 flex flex-col sm:flex-row justify-center gap-3">
+              <a href="login.html?redirect=dashboard.html%23profile" class="btn-neon-primary px-6 py-3 text-xs font-bold">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In to Account
+              </a>
+              <a href="index.html" class="btn-neon-outline px-6 py-3 text-xs font-bold">
+                <i class="bi bi-house-door"></i> Back to Home Page 1
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
     return `
       <div class="space-y-6 max-w-2xl">

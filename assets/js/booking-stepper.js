@@ -655,14 +655,14 @@ class VoxBookingStepper {
               `}
             </div>
 
-            <!-- Demo Authentication status indicator -->
+            <!-- Guest info notice if not logged in -->
             ${!currentUser ? `
-              <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-between gap-3">
+              <div class="p-4 rounded-2xl bg-purple-950/60 border border-purple-800/40 text-slate-300 text-xs flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2">
-                  <i class="bi bi-shield-exclamation text-base"></i>
-                  <span>You're booking as guest. Clicking Confirm will prompt instant login with demo credentials pre-filled so you won't lose your booking!</span>
+                  <i class="bi bi-info-circle text-pink-400 text-base"></i>
+                  <span>You're booking as a guest. Want to earn loyalty points and track this session?</span>
                 </div>
-                <a href="login.html" class="px-3 py-1.5 rounded-lg bg-amber-500 text-black font-bold whitespace-nowrap">Sign In</a>
+                <a href="login.html?redirect=dashboard.html%23book" class="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold whitespace-nowrap transition">Sign In</a>
               </div>
             ` : ''}
 
@@ -892,18 +892,7 @@ class VoxBookingStepper {
   }
 
   confirmBooking() {
-    // If not logged in, prompt login or auto-login with demo
-    let user = window.StorageManager.getCurrentUser();
-    if (!user) {
-      // Save draft and notify
-      window.StorageManager.setDraftBooking(this.state);
-      if (window.Toast) window.Toast.info('Logging you into demo session to complete booking...');
-      
-      const loginRes = window.StorageManager.login('demo@partyroom.com', 'Demo@123');
-      if (loginRes.success) {
-        user = loginRes.user;
-      }
-    }
+    const user = window.StorageManager.getCurrentUser();
 
     const room = this.state.selectedRoom;
     const hours = this.state.selectedSlots.length;
@@ -996,9 +985,15 @@ class VoxBookingStepper {
                   class="btn-neon-outline flex-1 py-3 text-xs">
             <i class="bi bi-calendar-event"></i> Add to Calendar (.ics)
           </button>
-          <a href="dashboard.html#reservations" class="btn-neon-primary flex-1 py-3 text-xs text-center">
-            <i class="bi bi-speedometer2"></i> View in Dashboard
-          </a>
+          ${user ? `
+            <a href="dashboard.html#reservations" class="btn-neon-primary flex-1 py-3 text-xs text-center">
+              <i class="bi bi-speedometer2"></i> View in Dashboard
+            </a>
+          ` : `
+            <a href="index.html" class="btn-neon-primary flex-1 py-3 text-xs text-center">
+              <i class="bi bi-house-door"></i> Back to Home Page 1
+            </a>
+          `}
         </div>
 
         <button type="button" onclick="document.getElementById('${modalId}').remove()" class="text-xs text-slate-400 hover:text-white">

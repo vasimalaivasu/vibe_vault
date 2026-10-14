@@ -67,7 +67,7 @@
         </div>
       </div>
       <div>
-        <span class="font-display font-black text-xl tracking-tight text-white group-hover:text-pink-300 transition-colors">VOX<span class="text-neon-pink">LOUNGE</span></span>
+        <span class="font-display font-black text-xl tracking-tight text-white group-hover:text-pink-300 transition-colors">VIBE<span class="text-neon-pink">VAULT</span></span>
       </div>
     </a>
 
@@ -151,7 +151,7 @@
             <label class="text-xs font-bold text-slate-300">Email Address</label>
             <div class="relative">
               <i class="bi bi-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="email" id="loginEmailInput" required placeholder="demo@partyroom.com"
+              <input type="email" id="loginEmailInput" required placeholder="singer@example.com"
                      class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
             </div>
           </div>
@@ -225,7 +225,7 @@
             <label class="text-xs font-bold text-slate-300">Full Name</label>
             <div class="relative">
               <i class="bi bi-person absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="text" id="regNameInput" required placeholder="Alex Vance"
+              <input type="text" id="regNameInput" required placeholder="Jane Doe"
                      class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
             </div>
           </div>
@@ -234,7 +234,7 @@
             <label class="text-xs font-bold text-slate-300">Email Address</label>
             <div class="relative">
               <i class="bi bi-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-              <input type="email" id="regEmailInput" required placeholder="alex@party.com"
+              <input type="email" id="regEmailInput" required placeholder="singer@example.com"
                      class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-pink-500 transition">
             </div>
           </div>
@@ -310,7 +310,7 @@
         Enter your account email and we'll send a password recovery reset link.
       </p>
       <form id="forgotPasswordForm" class="space-y-3">
-        <input type="email" id="forgotEmailInput" required placeholder="demo@partyroom.com"
+        <input type="email" id="forgotEmailInput" required placeholder="singer@example.com"
                class="w-full px-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-800/60 text-white text-xs focus:outline-none focus:border-pink-500">
         <button type="submit" class="btn-neon-primary w-full py-2.5 text-xs font-bold">
           Send Reset Instructions
@@ -394,6 +394,9 @@
 
         const res = window.StorageManager.login(email, pass);
         if (res.success) {
+          if (email.trim().toLowerCase() === 'demo@partyroom.com') {
+            localStorage.setItem('vox_explicit_demo_login', 'true');
+          }
           if (window.Toast) window.Toast.success(`Welcome back, ${res.user.name}!`, 'Signed In 🎉');
           const urlParams = new URLSearchParams(window.location.search);
           const redirectUrl = urlParams.get('redirect') || 'index.html';

@@ -68,16 +68,16 @@ const StorageManager = {
       this.set(STORAGE_KEYS.USERS_LIST, demoUsers);
     }
 
-    // Default Demo Session active ONLY on first initial visit before explicit logout
-    const hasInitialized = localStorage.getItem('vox_system_initialized');
-    const isLoggedOut = localStorage.getItem('vox_user_logged_out');
-    if (!hasInitialized && !isLoggedOut && !this.get(STORAGE_KEYS.USER)) {
-      const users = this.get(STORAGE_KEYS.USERS_LIST, []);
-      if (users.length > 0) {
-        this.set(STORAGE_KEYS.USER, users[0]);
+    // Ensure NO account is signed in by default. Initial visits always start signed out.
+    // Clean up any legacy auto-logged demo user from previous sessions.
+    const currentUser = this.get(STORAGE_KEYS.USER);
+    if (currentUser && (currentUser.id === 'usr-demo-001' || currentUser.email === 'demo@partyroom.com')) {
+      const wasExplicit = localStorage.getItem('vox_explicit_demo_login');
+      if (!wasExplicit) {
+        this.remove(STORAGE_KEYS.USER);
       }
-      localStorage.setItem('vox_system_initialized', 'true');
     }
+    localStorage.setItem('vox_system_initialized', 'true');
 
     // Default to Light Theme initially
     if (!localStorage.getItem('vibevault_light_initialized')) {
@@ -276,7 +276,7 @@ const StorageManager = {
       return { success: false, message: 'Account not found with this email.' };
     }
     if (user.password !== password) {
-      return { success: false, message: 'Invalid password. Hint: Try Demo@123' };
+      return { success: false, message: 'Invalid email or password.' };
     }
 
     this.set(STORAGE_KEYS.USER, user);
@@ -321,6 +321,7 @@ const StorageManager = {
   logout() {
     this.remove(STORAGE_KEYS.USER);
     localStorage.removeItem(STORAGE_KEYS.USER);
+    localStorage.removeItem('vox_explicit_demo_login');
     localStorage.setItem('vox_system_initialized', 'true');
     localStorage.setItem('vox_user_logged_out', 'true');
     try { sessionStorage.clear(); } catch(e) {}
