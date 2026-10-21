@@ -3423,12 +3423,36 @@ html.light #fallbackVenueAddress {
   color: #4C4569 !important;
 }
 
+/* Standalone Header & Controls (Login / Register) */
+[data-theme="light"] #standaloneThemeBtn,
+html.light #standaloneThemeBtn {
+  background-color: rgba(139, 92, 246, 0.12) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
+  color: #581c87 !important;
+}
 
+[data-theme="light"] #standaloneThemeBtn:hover,
+html.light #standaloneThemeBtn:hover {
+  background-color: rgba(139, 92, 246, 0.22) !important;
+  border-color: rgba(255, 0, 127, 0.45) !important;
+  color: #ff007f !important;
+}
 
+/* Auth Left Promo Panel Overrides in Light Mode */
+[data-theme="light"] #authPromoGradient,
+html.light #authPromoGradient {
+  background: linear-gradient(to top, rgba(240, 236, 252, 0.95) 0%, rgba(240, 236, 252, 0.35) 45%, transparent 100%) !important;
+}
 
+[data-theme="light"] #authPromoBgImg,
+html.light #authPromoBgImg {
+  opacity: 0.07 !important;
+  mix-blend-mode: luminosity !important;
+}
 
-
-
-
-
+[data-theme="light"] #authPerksList span,
+html.light #authPerksList span {
+  color: #1E1B4B !important;
+  font-weight: 600 !important;
+}
 

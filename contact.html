@@ -323,14 +323,6 @@
                       class="w-full h-full border-0 transition-opacity duration-300 opacity-0"
                       loading="eager"
                       allowfullscreen></iframe>
-
-              <!-- Map Overlay Badge (Floating info chip) -->
-              <div class="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-[#0b0914]/90 backdrop-blur-md border border-purple-800/60 text-[11px] text-white flex items-center gap-2 shadow-lg pointer-events-none z-10">
-                <i class="bi bi-geo-alt-fill text-pink-500"></i>
-                <span id="mapBadgeTitle" class="font-bold">Downtown Flagship Lounge</span>
-                <span class="text-slate-500">•</span>
-                <span class="text-emerald-400 font-semibold">Live GPS</span>
-              </div>
             </div>
           </div>
 
@@ -428,7 +420,6 @@
       const mapLoadingOverlay = document.getElementById('mapLoadingOverlay');
       const mapFallbackCard = document.getElementById('mapFallbackCard');
       const mapAddress = document.getElementById('currentMapAddress');
-      const mapBadge = document.getElementById('mapBadgeTitle');
       const directionsBtn = document.getElementById('getDirectionsBtn');
       const largerMapBtn = document.getElementById('viewLargerMapBtn');
       const branchBtns = document.querySelectorAll('.map-branch-btn');
@@ -526,7 +517,6 @@
             mapIframe.src = `https://maps.google.com/maps?q=${b.lat},${b.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
           }
           if (mapAddress) mapAddress.textContent = b.address;
-          if (mapBadge) mapBadge.textContent = b.name;
           if (directionsBtn) directionsBtn.href = b.directions;
           if (largerMapBtn) largerMapBtn.href = b.fullMap;
           if (fallbackTitle) fallbackTitle.textContent = b.name;

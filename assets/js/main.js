@@ -177,17 +177,17 @@ function initSongCatalogFilters() {
 
     listContainer.innerHTML = filtered.map(song => `
       <div class="glass-panel p-3.5 rounded-2xl border border-purple-800/40 hover:border-pink-500/50 transition flex items-center justify-between gap-3 group">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-950/80 border border-purple-800/40 flex items-center justify-center text-pink-400 group-hover:bg-pink-600 group-hover:text-white transition">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <div class="w-10 h-10 rounded-xl bg-purple-950/80 border border-purple-800/40 flex items-center justify-center text-pink-400 group-hover:bg-pink-600 group-hover:text-white transition shrink-0">
             <i class="bi bi-music-note-beamed text-lg"></i>
           </div>
-          <div>
-            <h5 class="font-display font-bold text-white text-sm group-hover:text-pink-300 transition">${song.title}</h5>
-            <p class="text-xs text-slate-400">${song.artist}</p>
+          <div class="min-w-0 flex-1">
+            <h5 class="font-display font-bold text-white text-sm group-hover:text-pink-300 transition whitespace-nowrap truncate" title="${song.title}">${song.title}</h5>
+            <p class="text-xs text-slate-400 whitespace-nowrap truncate" title="${song.artist}">${song.artist}</p>
           </div>
         </div>
-        <div class="text-right">
-          <span class="text-[10px] font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full">${song.badge}</span>
+        <div class="text-right shrink-0">
+          <span class="text-[10px] font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 rounded-full whitespace-nowrap inline-block">${song.badge}</span>
         </div>
       </div>
     `).join('');

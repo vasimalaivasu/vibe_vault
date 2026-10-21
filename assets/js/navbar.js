@@ -46,35 +46,37 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <!-- Home Dropdown -->
           <div class="relative group/navhome flex-shrink-0" id="navHomeDropdownContainer">
-            <button id="navHomeDropdownBtn" type="button" aria-haspopup="true"
+            <button id="navHomeDropdownBtn" type="button" aria-haspopup="true" aria-expanded="false"
                     class="px-2.5 py-1.5 xl:px-4 xl:py-2 rounded-full transition-all duration-200 flex items-center gap-1 xl:gap-1.5 whitespace-nowrap flex-nowrap shrink-0 ${isHomeActive ? 'nav-item-pill active bg-gradient-to-r from-pink-600/30 to-purple-600/35 text-white font-bold border border-pink-500/40 shadow-[0_0_15px_rgba(255,0,127,0.25)]' : 'nav-item-pill text-slate-300 hover:text-white hover:bg-purple-900/30 border border-transparent'}">
               <i class="bi bi-house-door text-xs opacity-75 hidden xl:inline-block"></i>
               <span>Home</span>
-              <i class="bi bi-chevron-down text-[10px] opacity-70 transition-transform duration-200 group-hover/navhome:rotate-180"></i>
+              <i id="navHomeChevron" class="bi bi-chevron-down text-[10px] opacity-70 transition-transform duration-200 group-hover/navhome:rotate-180"></i>
             </button>
 
-            <!-- Dropdown Menu -->
+            <!-- Dropdown Menu with Seamless Hover Bridge -->
             <div id="navHomeDropdownMenu"
-                 class="hidden group-hover/navhome:block hover:block absolute top-full left-0 mt-2 w-60 rounded-2xl bg-[#140e29]/95 backdrop-blur-xl border border-purple-700/50 shadow-2xl p-2 z-[70] text-xs animate-fadeIn">
-              <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-purple-800/40 transition group/item ${isLinkActive('index.html') ? 'bg-purple-900/40 text-pink-400 font-bold' : 'text-slate-200'}">
-                <div class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center shrink-0">
-                  <i class="bi bi-house-door"></i>
-                </div>
-                <div>
-                  <div class="font-bold text-white group-hover/item:text-pink-300 transition">Classic Lounge</div>
-                  <div class="text-[10px] text-slate-400">Private Karaoke Suites</div>
-                </div>
-              </a>
-              <div class="border-t border-purple-800/30 my-1"></div>
-              <a href="index2.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-purple-800/40 transition group/item ${isLinkActive('index2.html') ? 'bg-purple-900/40 text-cyan-400 font-bold' : 'text-slate-200'}">
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center shrink-0">
-                  <i class="bi bi-stars"></i>
-                </div>
-                <div>
-                  <div class="font-bold text-white group-hover/item:text-cyan-300 transition">VIP Nightlife</div>
-                  <div class="text-[10px] text-slate-400">Concert Audio & Live Beats</div>
-                </div>
-              </a>
+                 class="hidden group-hover/navhome:block hover:block absolute top-full left-0 pt-2 w-64 z-[70] animate-fadeIn before:absolute before:-top-2.5 before:left-0 before:right-0 before:h-3 before:content-['']">
+              <div class="w-full rounded-2xl bg-[#140e29]/95 backdrop-blur-xl border border-purple-700/50 shadow-2xl p-2 text-xs">
+                <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-purple-800/40 transition group/item ${isLinkActive('index.html') ? 'bg-purple-900/40 text-pink-400 font-bold' : 'text-slate-200'}">
+                  <div class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center shrink-0">
+                    <i class="bi bi-house-door"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-white group-hover/item:text-pink-300 transition">Classic Lounge</div>
+                    <div class="text-[10px] text-slate-400">Private Karaoke Suites</div>
+                  </div>
+                </a>
+                <div class="border-t border-purple-800/30 my-1"></div>
+                <a href="index2.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-purple-800/40 transition group/item ${isLinkActive('index2.html') ? 'bg-purple-900/40 text-cyan-400 font-bold' : 'text-slate-200'}">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center shrink-0">
+                    <i class="bi bi-stars"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-white group-hover/item:text-cyan-300 transition">VIP Nightlife</div>
+                    <div class="text-[10px] text-slate-400">Concert Audio & Live Beats</div>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -327,17 +329,60 @@ function initNavbarListeners() {
     });
   }
 
-  // Home Dropdown Click Listener (for touch / mobile)
+  // Home Dropdown Hover and Click Controller (with Graceful Intent Delay)
+  const homeContainer = document.getElementById('navHomeDropdownContainer');
   const homeBtn = document.getElementById('navHomeDropdownBtn');
   const homeMenu = document.getElementById('navHomeDropdownMenu');
-  if (homeBtn && homeMenu) {
-    homeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      homeMenu.classList.toggle('hidden');
-    });
-    document.addEventListener('click', (e) => {
-      if (!homeMenu.contains(e.target) && !homeBtn.contains(e.target)) {
+  const homeChevron = document.getElementById('navHomeChevron');
+
+  if (homeContainer && homeMenu) {
+    let hoverTimer = null;
+
+    const openDropdown = () => {
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+      homeMenu.classList.remove('hidden');
+      if (homeBtn) homeBtn.setAttribute('aria-expanded', 'true');
+      if (homeChevron) homeChevron.classList.add('rotate-180');
+    };
+
+    const closeDropdown = () => {
+      if (hoverTimer) clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(() => {
         homeMenu.classList.add('hidden');
+        if (homeBtn) homeBtn.setAttribute('aria-expanded', 'false');
+        if (homeChevron) homeChevron.classList.remove('rotate-180');
+      }, 250); // 250ms buffer prevents accidental closure when moving mouse towards items
+    };
+
+    // Both mouseenter and mouseleave on container and menu
+    homeContainer.addEventListener('mouseenter', openDropdown);
+    homeContainer.addEventListener('mouseleave', closeDropdown);
+    homeMenu.addEventListener('mouseenter', openDropdown);
+    homeMenu.addEventListener('mouseleave', closeDropdown);
+
+    // Click handler for touch devices or direct clicking
+    if (homeBtn) {
+      homeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (homeMenu.classList.contains('hidden')) {
+          openDropdown();
+        } else {
+          homeMenu.classList.add('hidden');
+          homeBtn.setAttribute('aria-expanded', 'false');
+          if (homeChevron) homeChevron.classList.remove('rotate-180');
+        }
+      });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!homeContainer.contains(e.target)) {
+        homeMenu.classList.add('hidden');
+        if (homeBtn) homeBtn.setAttribute('aria-expanded', 'false');
+        if (homeChevron) homeChevron.classList.remove('rotate-180');
       }
     });
   }
