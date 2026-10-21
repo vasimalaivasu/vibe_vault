@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const unreadNotifs = window.StorageManager ? window.StorageManager.getNotifications().filter(n => !n.read).length : 0;
   const currentTheme = window.StorageManager ? window.StorageManager.getTheme() : 'light';
   const currentDir = window.StorageManager ? window.StorageManager.getDirection() : 'ltr';
+  const bookLink = currentUser ? 'dashboard.html#book' : 'login.html?redirect=' + encodeURIComponent('dashboard.html#book');
 
   // Helper to determine active link classes
   const isLinkActive = (file) => (currentPath === file || (file === 'index.html' && (currentPath === '' || currentPath === '/')));
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- Primary Book CTA (Placed before Profile button) -->
-          <a href="dashboard.html#book" class="btn-neon-primary px-3 py-1.5 xl:px-5 xl:py-2.5 rounded-full text-xs font-bold tracking-wide shadow-[0_0_20px_rgba(255,0,127,0.35)] hover:shadow-[0_0_30px_rgba(255,0,127,0.55)] flex items-center gap-1.5 xl:gap-2 whitespace-nowrap shrink-0">
+          <a href="${bookLink}" class="btn-neon-primary px-3 py-1.5 xl:px-5 xl:py-2.5 rounded-full text-xs font-bold tracking-wide shadow-[0_0_20px_rgba(255,0,127,0.35)] hover:shadow-[0_0_30px_rgba(255,0,127,0.55)] flex items-center gap-1.5 xl:gap-2 whitespace-nowrap shrink-0">
             <i class="bi bi-calendar-plus text-xs xl:text-sm"></i>
             <span>Book a Room</span>
           </a>
@@ -268,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
           `}
         </div>
 
-        <a href="dashboard.html#book" class="btn-neon-primary w-full py-3 text-center text-sm">
+        <a href="${bookLink}" class="btn-neon-primary w-full py-3 text-center text-sm">
           <i class="bi bi-calendar-plus"></i> Book a Room Now
         </a>
       </div>
@@ -281,14 +282,45 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initNavbarListeners() {
-  // Theme Toggle
+  const updateThemeIcons = (theme) => {
+    const isLight = theme === 'light';
+    const moonClass = 'bi-moon-stars-fill text-amber-400';
+    const sunClass = 'bi-sun-fill text-yellow-300';
+
+    const desktopIcon = document.querySelector('#themeToggleBtn i');
+    if (desktopIcon) desktopIcon.className = `bi ${isLight ? moonClass : sunClass} text-xs xl:text-sm`;
+
+    const mobileIcon = document.querySelector('#mobileThemeToggleBtn i');
+    if (mobileIcon) mobileIcon.className = `bi ${isLight ? moonClass : sunClass}`;
+
+    const dashIcon = document.querySelector('#dashThemeToggleBtn i');
+    if (dashIcon) dashIcon.className = `bi ${isLight ? moonClass : sunClass} text-xs`;
+
+    const standaloneIcon = document.getElementById('standaloneThemeIcon');
+    if (standaloneIcon) standaloneIcon.className = `bi ${isLight ? moonClass : sunClass} text-sm`;
+  };
+
+  const updateRtlLabels = (dir) => {
+    const isRtl = dir === 'rtl';
+    const rtlSpan = document.querySelector('#rtlToggleBtn span');
+    if (rtlSpan) rtlSpan.textContent = isRtl ? 'LTR' : 'RTL';
+
+    const mobileRtlSpan = document.querySelector('#mobileRtlBtn span');
+    if (mobileRtlSpan) mobileRtlSpan.textContent = isRtl ? 'LTR Layout' : 'RTL Layout';
+
+    const dashRtlSpan = document.querySelector('#dashRtlToggleBtn span');
+    if (dashRtlSpan) dashRtlSpan.textContent = isRtl ? 'LTR' : 'RTL';
+  };
+
+  // Theme Toggle (smooth dynamic switch without page reload)
   const toggleTheme = () => {
     if (window.StorageManager) {
       const next = window.StorageManager.toggleTheme();
+      updateThemeIcons(next);
       if (window.Toast) {
         window.Toast.neon(`Switched to ${next.toUpperCase()} Mode!`);
       }
-      setTimeout(() => location.reload(), 200);
+      window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: next } }));
     }
   };
 
@@ -297,14 +329,15 @@ function initNavbarListeners() {
   if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
   if (mobileThemeBtn) mobileThemeBtn.addEventListener('click', toggleTheme);
 
-  // RTL Toggle
+  // RTL Toggle (smooth dynamic switch without page reload)
   const toggleRtl = () => {
     if (window.StorageManager) {
       const next = window.StorageManager.toggleDirection();
+      updateRtlLabels(next);
       if (window.Toast) {
         window.Toast.info(`Direction set to ${next.toUpperCase()}`);
       }
-      setTimeout(() => location.reload(), 200);
+      window.dispatchEvent(new CustomEvent('directionChanged', { detail: { direction: next } }));
     }
   };
 
@@ -312,6 +345,9 @@ function initNavbarListeners() {
   const mobileRtlBtn = document.getElementById('mobileRtlBtn');
   if (rtlBtn) rtlBtn.addEventListener('click', toggleRtl);
   if (mobileRtlBtn) mobileRtlBtn.addEventListener('click', toggleRtl);
+
+  window.toggleThemeGlobal = toggleTheme;
+  window.toggleRtlGlobal = toggleRtl;
 
   // User Dropdown Trigger
   const trigger = document.getElementById('userDropdownTrigger');

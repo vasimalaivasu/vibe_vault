@@ -53,8 +53,22 @@
     })();
   </script>
 
+  <!-- Immediate Auth Guard: Redirect unauthenticated visitors directly to login.html -->
+  <script>
+    (function() {
+      try {
+        const u = localStorage.getItem('vox_current_user');
+        const user = u ? JSON.parse(u) : null;
+        if (!user) {
+          const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+          window.location.replace('login.html?redirect=' + encodeURIComponent(currentTarget || 'dashboard.html#book'));
+        }
+      } catch(e) {}
+    })();
+  </script>
+
   <!-- Custom Theme Styles with Cache Busting -->
-  <link rel="stylesheet" href="assets/css/main.css?v=3.7">
+  <link rel="stylesheet" href="assets/css/main.css?v=4.0">
 </head>
 <body class="antialiased min-h-screen flex selection:bg-pink-600 selection:text-white overflow-x-hidden">
 
@@ -194,13 +208,13 @@
 
         <!-- Unified Quick Controls Pill (Theme + RTL) -->
         <div class="flex items-center bg-purple-950/40 border border-purple-800/40 rounded-full p-1 backdrop-blur-md">
-          <button id="dashThemeToggleBtn" onclick="window.StorageManager.toggleTheme(); setTimeout(() => location.reload(), 200);"
+          <button id="dashThemeToggleBtn" onclick="if(window.toggleThemeGlobal){window.toggleThemeGlobal();}else if(window.StorageManager){window.StorageManager.toggleTheme();}"
                   title="Toggle Dark/Light Mode" aria-label="Toggle Theme"
                   class="w-8 h-8 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-purple-900/50 flex items-center justify-center transition">
             <i class="bi bi-moon-stars-fill text-xs"></i>
           </button>
           <span class="w-px h-3.5 bg-purple-800/60 mx-0.5"></span>
-          <button id="dashRtlToggleBtn" onclick="window.StorageManager.toggleDirection(); setTimeout(() => location.reload(), 200);"
+          <button id="dashRtlToggleBtn" onclick="if(window.toggleRtlGlobal){window.toggleRtlGlobal();}else if(window.StorageManager){window.StorageManager.toggleDirection();}"
                   title="Toggle RTL / LTR" aria-label="Toggle RTL"
                   class="px-2.5 h-8 rounded-full text-xs font-bold text-slate-300 hover:text-pink-400 hover:bg-purple-900/50 flex items-center justify-center gap-1 transition">
             <span>RTL</span>
@@ -240,13 +254,11 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Check current user session (never auto-login demo account)
+      // Check current user session (never allow unauthenticated access to dashboard or booking)
       const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
-
-      // If unauthenticated and not opening the booking wizard, redirect directly to Home Page 1 (index.html)
-      const isBookingIntent = window.location.hash.includes('book') || window.location.search.includes('roomId') || window.location.search.includes('packageId') || window.location.search.includes('date');
-      if (!user && !isBookingIntent) {
-        window.location.href = 'index.html';
+      if (!user) {
+        const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+        window.location.replace('login.html?redirect=' + encodeURIComponent(currentTarget || 'dashboard.html#book'));
         return;
       }
 

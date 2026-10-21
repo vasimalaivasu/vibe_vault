@@ -15,6 +15,14 @@ class VoxDashboard {
   }
 
   init() {
+    // Enforce authentication - unauthenticated users must login
+    const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+    if (!user) {
+      const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+      window.location.replace('login.html?redirect=' + encodeURIComponent(currentTarget || 'dashboard.html#book'));
+      return;
+    }
+
     // Check hash for initial section
     const hash = window.location.hash.replace('#', '');
     if (hash && ['overview', 'book', 'reservations', 'addons', 'favorites', 'notifications', 'profile'].includes(hash)) {

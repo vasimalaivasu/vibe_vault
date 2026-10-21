@@ -329,7 +329,7 @@
                       class="text-xs font-bold text-slate-300 hover:text-cyan-400 transition flex items-center gap-1">
                 <span>View Details</span> <i class="bi bi-arrow-right"></i>
               </button>
-              <a href="dashboard.html?roomId=${room.id}#book"
+              <a href="${window.StorageManager && window.StorageManager.getCurrentUser() ? `dashboard.html?roomId=${room.id}#book` : `login.html?redirect=${encodeURIComponent(`dashboard.html?roomId=${room.id}#book`)}`}"
                  class="btn-neon-primary px-4 py-2 text-xs">
                 <i class="bi bi-calendar-plus"></i> Book Now
               </a>

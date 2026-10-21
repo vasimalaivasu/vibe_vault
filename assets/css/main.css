@@ -3456,3 +3456,177 @@ html.light #authPerksList span {
   font-weight: 600 !important;
 }
 
+/* ==========================================================================
+   IN-ROOM KITCHEN & CRAFT BAR CONCIERGE (LIGHT & DARK THEMES)
+   Ensures crystal-clear visibility, high WCAG contrast, and rich aesthetics
+   ========================================================================== */
+.kitchen-concierge-container {
+  background: linear-gradient(135deg, rgba(26, 16, 51, 0.85) 0%, rgba(16, 12, 36, 0.95) 50%, rgba(38, 14, 45, 0.8) 100%);
+  border: 1px solid rgba(255, 0, 127, 0.3);
+  color: #FFFFFF;
+}
+
+.kitchen-delivery-badge {
+  background: rgba(30, 27, 75, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #E2E8F0;
+}
+
+.kitchen-delivery-label {
+  color: #94A3B8;
+}
+
+.kitchen-delivery-time {
+  color: #67E8F9;
+}
+
+.kitchen-feature-box {
+  background: rgba(30, 27, 75, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #CBD5E1;
+}
+
+.kitchen-feature-box:hover {
+  border-color: rgba(255, 0, 127, 0.5);
+}
+
+.kitchen-feature-box p {
+  color: #94A3B8;
+}
+
+.kitchen-notes-banner {
+  background-color: #0B0817;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #F1F5F9;
+}
+
+.kitchen-notes-text {
+  color: #E2E8F0;
+}
+
+.kitchen-notes-text span {
+  color: #E2E8F0;
+}
+
+.kitchen-notes-text strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.kitchen-dietary-pill {
+  background-color: rgba(88, 28, 135, 0.4);
+  color: #E9D5FF;
+  border: 1px solid rgba(147, 51, 234, 0.35);
+}
+
+/* Light Theme High-Contrast Overrides */
+[data-theme="light"] .kitchen-concierge-container,
+html.light .kitchen-concierge-container {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF8FF 100%) !important;
+  border: 1px solid rgba(216, 180, 254, 0.85) !important;
+  box-shadow: 0 10px 30px -5px rgba(120, 80, 190, 0.12) !important;
+  color: #120B2E !important;
+}
+
+[data-theme="light"] .kitchen-concierge-container h4,
+html.light .kitchen-concierge-container h4 {
+  color: #120B2E !important;
+}
+
+[data-theme="light"] .kitchen-delivery-badge,
+html.light .kitchen-delivery-badge {
+  background: #F3EEFA !important;
+  border: 1px solid rgba(216, 180, 254, 0.8) !important;
+  color: #120B2E !important;
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.08) !important;
+}
+
+[data-theme="light"] .kitchen-delivery-label,
+html.light .kitchen-delivery-label {
+  color: #4C4569 !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="light"] .kitchen-delivery-time,
+html.light .kitchen-delivery-time {
+  color: #0284C7 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="light"] .kitchen-feature-box,
+html.light .kitchen-feature-box {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(216, 180, 254, 0.75) !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.06) !important;
+}
+
+[data-theme="light"] .kitchen-feature-box:hover,
+html.light .kitchen-feature-box:hover {
+  background: #FFFFFF !important;
+  border-color: rgba(255, 0, 127, 0.5) !important;
+  box-shadow: 0 6px 20px rgba(255, 0, 127, 0.14) !important;
+}
+
+[data-theme="light"] .kitchen-feature-box .text-pink-400,
+html.light .kitchen-feature-box .text-pink-400 {
+  color: #BE185D !important;
+}
+
+[data-theme="light"] .kitchen-feature-box .text-cyan-300,
+html.light .kitchen-feature-box .text-cyan-300 {
+  color: #0369A1 !important;
+}
+
+[data-theme="light"] .kitchen-feature-box .text-amber-300,
+html.light .kitchen-feature-box .text-amber-300 {
+  color: #B45309 !important;
+}
+
+[data-theme="light"] .kitchen-feature-box .text-emerald-300,
+html.light .kitchen-feature-box .text-emerald-300 {
+  color: #047857 !important;
+}
+
+[data-theme="light"] .kitchen-feature-box p,
+html.light .kitchen-feature-box p {
+  color: #373059 !important;
+  font-weight: 450 !important;
+}
+
+[data-theme="light"] .kitchen-notes-banner,
+html.light .kitchen-notes-banner {
+  background: linear-gradient(135deg, #F5EFFE 0%, #FDF2F8 100%) !important;
+  border: 1px solid rgba(216, 180, 254, 0.95) !important;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.09) !important;
+  color: #1A1033 !important;
+}
+
+[data-theme="light"] .kitchen-notes-banner .kitchen-notes-text,
+[data-theme="light"] .kitchen-notes-banner .kitchen-notes-text span,
+html.light .kitchen-notes-banner .kitchen-notes-text,
+html.light .kitchen-notes-banner .kitchen-notes-text span {
+  color: #1A1033 !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="light"] .kitchen-notes-banner .kitchen-notes-text strong,
+html.light .kitchen-notes-banner .kitchen-notes-text strong {
+  color: #0F0728 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .kitchen-notes-banner .bi-info-circle-fill,
+html.light .kitchen-notes-banner .bi-info-circle-fill {
+  color: #DB2777 !important;
+}
+
+[data-theme="light"] .kitchen-dietary-pill,
+html.light .kitchen-dietary-pill {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(216, 180, 254, 0.95) !important;
+  color: #581C87 !important;
+  box-shadow: 0 2px 6px rgba(120, 80, 190, 0.08) !important;
+  font-weight: 700 !important;
+}
+
+

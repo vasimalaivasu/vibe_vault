@@ -56,6 +56,14 @@ class VoxBookingStepper {
   }
 
   init() {
+    // Auth Guard: Stepper requires active login
+    const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+    if (!user) {
+      const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+      window.location.replace(`login.html?redirect=${encodeURIComponent(currentTarget || 'dashboard.html#book')}`);
+      return;
+    }
+
     // Check prefilled query parameters or draft
     const params = new URLSearchParams(window.location.search);
     const preRoomId = params.get('roomId');
@@ -93,10 +101,31 @@ class VoxBookingStepper {
     // Start fresh: no time slots pre-selected
     this.state.selectedSlots = [];
 
+    // Check if there is an active draft session to restore (preserves progress across step changes and mode switches)
+    const draft = window.StorageManager ? window.StorageManager.getDraftBooking() : null;
+    if (draft && draft.state && !preRoomId && !prePackageId) {
+      this.state = { ...this.state, ...draft.state };
+      if (draft.currentStep && draft.currentStep >= 1 && draft.currentStep <= this.totalSteps) {
+        this.currentStep = draft.currentStep;
+      }
+    }
+
     this.render();
   }
 
+  saveDraft() {
+    if (window.StorageManager && this.state) {
+      window.StorageManager.setDraftBooking({
+        currentStep: this.currentStep,
+        state: this.state
+      });
+    }
+  }
+
   resetState() {
+    if (window.StorageManager) {
+      window.StorageManager.clearDraftBooking();
+    }
     this.currentStep = 1;
     this.state = {
       selectedRoom: null,
@@ -181,6 +210,7 @@ class VoxBookingStepper {
     `;
 
     this.bindEvents();
+    this.saveDraft();
   }
 
   renderStepBullet(stepNum, label, icon) {
@@ -585,7 +615,7 @@ class VoxBookingStepper {
         </div>
 
         <!-- In-Suite Kitchen, Bar & Dietary Concierge Container -->
-        <div class="glass-panel p-6 sm:p-7 rounded-3xl border border-pink-500/30 bg-gradient-to-br from-purple-950/60 via-[#100c24] to-pink-950/30 shadow-[0_0_30px_rgba(255,0,127,0.15)] space-y-5">
+        <div class="kitchen-concierge-container glass-panel p-6 sm:p-7 rounded-3xl border border-pink-500/30 space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-purple-800/40">
             <div class="flex items-center gap-3.5">
               <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-500 to-amber-400 flex items-center justify-center text-white shadow-lg text-xl flex-shrink-0">
@@ -600,70 +630,70 @@ class VoxBookingStepper {
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Live Kitchen Open
                   </span>
                 </div>
-                <h4 class="font-display font-black text-white text-lg sm:text-xl mt-1">
+                <h4 class="font-display font-black text-lg sm:text-xl mt-1">
                   Chef's Kitchen & Craft Bar In-Suite Service
                 </h4>
               </div>
             </div>
-            <div class="text-xs text-slate-300 bg-purple-950/60 px-3.5 py-2 rounded-xl border border-purple-800/40 sm:text-right">
-              <span class="text-slate-400 block">Average In-Room Delivery</span>
-              <span class="font-bold text-cyan-300"><i class="bi bi-stopwatch text-pink-400"></i> Under 12 Minutes</span>
+            <div class="kitchen-delivery-badge text-xs px-3.5 py-2 rounded-xl sm:text-right">
+              <span class="kitchen-delivery-label block">Average In-Room Delivery</span>
+              <span class="kitchen-delivery-time font-bold"><i class="bi bi-stopwatch text-pink-400"></i> Under 12 Minutes</span>
             </div>
           </div>
 
           <!-- Feature Highlights Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
-            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-pink-500/40 transition">
+            <div class="kitchen-feature-box p-3.5 rounded-2xl space-y-1.5 transition">
               <div class="flex items-center gap-2 text-pink-400 font-bold">
                 <i class="bi bi-tablet-landscape text-base"></i>
                 <span>iPad Touch Ordering</span>
               </div>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
+              <p class="text-[11px] leading-relaxed">
                 Order extra cocktails, mocktails, and fresh finger foods directly from your suite's wall-mounted digital tablet at any time.
               </p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-cyan-400/40 transition">
+            <div class="kitchen-feature-box p-3.5 rounded-2xl space-y-1.5 transition">
               <div class="flex items-center gap-2 text-cyan-300 font-bold">
                 <i class="bi bi-patch-check-fill text-base"></i>
                 <span>Dietary Accommodations</span>
               </div>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
+              <p class="text-[11px] leading-relaxed">
                 Certified Halal, 100% Vegan, Gluten-Free & Nut-Free options freshly prepared in dedicated allergen-separated kitchen stations.
               </p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-amber-400/40 transition">
+            <div class="kitchen-feature-box p-3.5 rounded-2xl space-y-1.5 transition">
               <div class="flex items-center gap-2 text-amber-300 font-bold">
                 <i class="bi bi-bell-fill text-base"></i>
                 <span>Private Suite Runner</span>
               </div>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
+              <p class="text-[11px] leading-relaxed">
                 Discreet delivery by dedicated runners who replenish ice, refresh glasses, and serve hot platters without interrupting your singing.
               </p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-800/30 space-y-1.5 hover:border-emerald-400/40 transition">
+            <div class="kitchen-feature-box p-3.5 rounded-2xl space-y-1.5 transition">
               <div class="flex items-center gap-2 text-emerald-300 font-bold">
                 <i class="bi bi-shield-lock-fill text-base"></i>
                 <span>Pre-Pay or Tab on Arrival</span>
               </div>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
+              <p class="text-[11px] leading-relaxed">
                 Pay for add-ons now with your 20% booking deposit, or keep an open digital tab that settles at reception upon room checkout.
               </p>
             </div>
           </div>
 
           <!-- Dietary & Kitchen Notes Quick Selector -->
-          <div class="p-4 rounded-2xl bg-[#0b0817] border border-purple-800/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2 text-slate-300">
-              <i class="bi bi-info-circle text-pink-400 text-sm"></i>
+          <div class="kitchen-notes-banner p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+            <div class="kitchen-notes-text flex items-center gap-2.5">
+              <i class="bi bi-info-circle-fill text-pink-500 text-base flex-shrink-0"></i>
               <span>Have specific food allergies or bottle service requests? You can add them in <strong>Step 3 (Special Requests)</strong> or tell our chef at reception!</span>
             </div>
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">🌿 Vegan Friendly</span>
-              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">✨ Halal Certified</span>
-              <span class="px-2.5 py-1 rounded-lg bg-purple-900/40 text-purple-200 text-[11px] font-semibold border border-purple-700/30">🌾 Gluten-Free</span>
+              <span class="kitchen-dietary-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold border">🌿 Vegan Friendly</span>
+              <span class="kitchen-dietary-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold border">✨ Halal Certified</span>
+              <span class="kitchen-dietary-pill px-2.5 py-1 rounded-lg text-[11px] font-semibold border">🌾 Gluten-Free</span>
             </div>
           </div>
         </div>
@@ -764,18 +794,6 @@ class VoxBookingStepper {
                 <p class="text-xs text-slate-400">No add-ons selected. You can also order directly inside the room from our iPad.</p>
               `}
             </div>
-
-            <!-- Guest info notice if not logged in -->
-            ${!currentUser ? `
-              <div class="p-4 rounded-2xl bg-purple-950/60 border border-purple-800/40 text-slate-300 text-xs flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2">
-                  <i class="bi bi-info-circle text-pink-400 text-base"></i>
-                  <span>You're booking as a guest. Want to earn loyalty points and track this session?</span>
-                </div>
-                <a href="login.html?redirect=dashboard.html%23book" class="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold whitespace-nowrap transition">Sign In</a>
-              </div>
-            ` : ''}
-
           </div>
 
           <!-- Right: Live Cost Calculation & Promo -->
@@ -856,6 +874,14 @@ class VoxBookingStepper {
   // -------------------------------------------------------------
   goToStep(step) {
     if (step < 1 || step > this.totalSteps) return;
+
+    // Strict Auth Guard: booking requires an active user session
+    const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+    if (!user) {
+      const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+      window.location.replace(`login.html?redirect=${encodeURIComponent(currentTarget || 'dashboard.html#book')}`);
+      return;
+    }
 
     // Validation when moving forward
     if (step > 1 && !this.state.selectedRoom) {
@@ -1002,7 +1028,15 @@ class VoxBookingStepper {
   }
 
   confirmBooking() {
-    const user = window.StorageManager.getCurrentUser();
+    const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+    if (!user) {
+      if (window.Toast) window.Toast.error('Please sign in to complete and confirm your room booking.');
+      const currentTarget = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+      setTimeout(() => {
+        window.location.href = `login.html?redirect=${encodeURIComponent(currentTarget || 'dashboard.html#book')}`;
+      }, 350);
+      return;
+    }
 
     const room = this.state.selectedRoom;
     const hours = this.state.selectedSlots.length;

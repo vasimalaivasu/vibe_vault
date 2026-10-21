@@ -378,6 +378,12 @@ const StorageManager = {
   },
 
   createReservation(bookingData) {
+    const user = this.getCurrentUser();
+    if (!user) {
+      console.warn('StorageManager.createReservation: Unauthenticated booking rejected.');
+      return null;
+    }
+
     const reservations = this.getReservations();
     const id = 'KP-2026-' + String(reservations.length + 130).padStart(5, '0');
 
@@ -392,7 +398,6 @@ const StorageManager = {
     this.set(STORAGE_KEYS.RESERVATIONS, reservations);
 
     // Add reward points & notification
-    const user = this.getCurrentUser();
     if (user) {
       const earnedPoints = Math.round((newBooking.totalAmount || 100) * 0.5);
       this.updateProfile({

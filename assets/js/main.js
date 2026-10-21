@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSongCatalogFilters();
   initLightbox();
   initGlobalHeartButtons();
+  initAuthRequiredLinksGuard();
 });
 
 // -------------------------------------------------------------
@@ -40,9 +41,15 @@ function initHeroAvailabilityWidget() {
       window.Toast.neon('Checking live stage availability...');
     }
 
-    // Redirect to dashboard booking with query parameters prefilled
+    // Redirect to dashboard booking with query parameters prefilled (or login if unauthenticated)
     setTimeout(() => {
-      window.location.href = `dashboard.html?date=${encodeURIComponent(date)}&guests=${encodeURIComponent(guests)}#book`;
+      const targetUrl = `dashboard.html?date=${encodeURIComponent(date)}&guests=${encodeURIComponent(guests)}#book`;
+      const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+      if (!user) {
+        window.location.href = `login.html?redirect=${encodeURIComponent(targetUrl)}`;
+      } else {
+        window.location.href = targetUrl;
+      }
     }, 300);
   });
 }
@@ -428,7 +435,7 @@ function openRoomDetailsModal(roomId) {
           <button onclick="document.getElementById('voxRoomDetailsModal').remove()" class="btn-neon-outline px-4 py-2.5 text-xs">
             Close
           </button>
-          <a href="dashboard.html?roomId=${room.id}#book" class="btn-neon-primary px-6 py-2.5 text-xs">
+          <a href="${window.StorageManager && window.StorageManager.getCurrentUser() ? `dashboard.html?roomId=${room.id}#book` : `login.html?redirect=${encodeURIComponent(`dashboard.html?roomId=${room.id}#book`)}`}" class="btn-neon-primary px-6 py-2.5 text-xs">
             <i class="bi bi-calendar-plus"></i> Book This Room
           </a>
         </div>
@@ -438,7 +445,26 @@ function openRoomDetailsModal(roomId) {
   `;
 }
 
+// -------------------------------------------------------------
+// 7. GLOBAL AUTH GUARD FOR BOOKING & DASHBOARD ACCESS
+// -------------------------------------------------------------
+function initAuthRequiredLinksGuard() {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href*="dashboard.html"]');
+    if (!link) return;
+
+    const user = window.StorageManager ? window.StorageManager.getCurrentUser() : null;
+    if (!user) {
+      e.preventDefault();
+      const rawHref = link.getAttribute('href');
+      const targetUrl = rawHref || 'dashboard.html#book';
+      window.location.href = `login.html?redirect=${encodeURIComponent(targetUrl)}`;
+    }
+  });
+}
+
 // Global attach
 if (typeof window !== 'undefined') {
   window.openRoomDetailsModal = openRoomDetailsModal;
+  window.initAuthRequiredLinksGuard = initAuthRequiredLinksGuard;
 }
